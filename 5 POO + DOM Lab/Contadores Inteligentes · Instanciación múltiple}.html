@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <div id="contenedorId"></div>
+    <div id="contenedorId2"></div>
+    <script>
+        class Contador {
+  constructor(contenedorId, valorInicial = 0) {
+    this.valor = valorInicial;
+    this.contenedor = document.getElementById(contenedorId);
+    this.render();
+  }
+  incrementar() {
+    this.valor++;
+    this.render();
+  }
+  decrementar() {
+    this.valor--;
+    this.render();
+  }
+  render() {
+    if (!this.contenedor) return;
+    this.contenedor.innerHTML = `
+      <div class="bg-gray-800 p-4 rounded-xl text-center">
+        <span class="text-3xl font-mono">${this.valor}</span>
+        <div class="flex gap-2 mt-2">
+          <button class="bg-green-600 px-3 py-1 rounded">+1</button>
+          <button class="bg-red-600 px-3 py-1 rounded">-1</button>
+        </div>
+      </div>
+    `;
+    const btnUp = this.contenedor.querySelector('button:first-of-type');
+    const btnDown = this.contenedor.querySelector('button:last-of-type');
+    btnUp.onclick = () => this.incrementar();
+    btnDown.onclick = () => this.decrementar();
+  }
+}
+const objecto = new Contador("contenedorId",10);
+const objecto2 = new Contador("contenedorId2",5);
+    </script>
+    <body style="background:#838383; display:flex; gap:20px; padding:40px;">
+</html>
+

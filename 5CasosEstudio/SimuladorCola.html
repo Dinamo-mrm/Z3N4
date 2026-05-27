@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Cola de Atención</title>
+    <link rel="stylesheet" href="SimuladorCola.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Simulador de Cola de Atención</h1>
+
+        <section class="registro">
+            <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
+            <select id="tipoCliente">
+                <option value="normal">Normal</option>
+                <option value="prioritario">Prioritario</option>
+            </select>
+            <button id="btnEncolar">Encolar Cliente</button>
+        </section>
+
+        <section class="pantalla-atencion">
+            <div class="card">
+                <h3>Atendiendo a:</h3>
+                <p id="clienteActual">Ninguno</p>
+            </div>
+            <button id="btnAtender" class="btn-primary">Atender Siguiente</button>
+        </section>
+
+        <section class="listado">
+            <h3>Siguiente en la cola: <span id="nombreSiguiente">--</span></h3>
+            <div id="colaVisual" class="cola-visual"></div>
+        </section>
+
+        <section class="estadisticas">
+            <p>Total atendidos: <span id="totalAtendidos">0</span></p>
+            <p>Promedio de espera: <span id="promedioEspera">0</span> seg</p>
+        </section>
+    </div>
+
+    <script src="SimuladorCola.js"></script>
+</body>
+</html>

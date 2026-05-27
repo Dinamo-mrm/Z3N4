@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Clases — Eventos y Binding</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; background: #E8F8F5; color: #164E63; }
+    .card { background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(22, 78, 99, 0.1); }
+    .num-display { font-size: 80px; font-weight: bold; color: #0891B2; margin: 10px 0; }
+    .record-label { color: #E67E22; font-weight: bold; margin-bottom: 20px; font-size: 14px; }
+    
+    .btn-main { background: #0891B2; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
+    .btn-main:active { transform: scale(0.95); }
+    
+    .btn-reset { background: #ECFEFF; color: #0891B2; border: 2px solid #0891B2; padding: 10px; border-radius: 8px; margin-top: 15px; cursor: pointer; width: 100%; font-weight: bold; }
+
+    #historial { margin-top: 25px; text-align: left; border-top: 1px solid #CFFAFE; padding-top: 15px; }
+    .item-hist { font-size: 13px; padding: 6px 10px; background: #F0FDFA; border-radius: 6px; margin-bottom: 5px; color: #155E75; border-left: 3px solid #0891B2; }
+    .hint { font-size: 12px; color: #64748B; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h3>🔗 Contador de Clics</h3>
+    
+    <div id="record-display" class="record-label">Récord (5s): 0 clics</div>
+    <div id="num-clics" class="num-display">0</div>
+    
+    <button id="btn-click" class="btn-main">¡Haz clic!</button>
+    <button id="btn-reset" class="btn-reset">🔄 Resetear</button>
+    
+    <p class="hint">O presiona <b>Espacio</b> o <b>Enter</b></p>
+
+    <div id="historial">
+      <small>📋 Historial de eventos</small>
+      <div id="lista-historial"></div>
+    </div>
+  </div>
+
+<script>
+class Contador {
+    constructor(idDisplay) {
+        this.clics = 0;
+        this.historial = [];
+        this.elementoId = idDisplay;
+        
+        // Bonus: Variables para el récord
+        this.record = 0;
+        this.clicsEnSesion = 0;
+
+        // --- BINDING DE EVENTOS ---
+
+        // 1. Solución Arrow Function para el botón principal
+        const btn = document.getElementById("btn-click");
+        btn.addEventListener("click", () => {
+            this.registrarAccion("Clic en Botón");
+        });
+
+        // 2. Solución .bind(this) para el teclado (Mini-reto: Space + Enter)
+        document.addEventListener("keydown", this.manejarTeclado.bind(this));
+
+        // 3. Resetear (Arrow function)
+        document.getElementById("btn-reset").addEventListener("click", () => this.reset());
+
+        // --- SISTEMA DE RÉCORD (Bonus) ---
+        // Cada 5 segundos verificamos cuántos clics se hicieron
+        setInterval(() => {
+            if (this.clicsEnSesion > this.record) {
+                this.record = this.clicsEnSesion;
+            }
+            this.clicsEnSesion = 0; // Reiniciamos contador de velocidad
+            this.render();
+        }, 5000);
+    }
+
+    registrarAccion(fuente) {
+        this.clics++;
+        this.clicsEnSesion++; // Sumamos para el récord de velocidad
+        
+        const nuevoRegistro = {
+            num: this.clics,
+            fuente: fuente,
+            hora: new Date().toLocaleTimeString()
+        };
+
+        this.historial.unshift(nuevoRegistro);
+        if (this.historial.length > 5) this.historial.pop(); // Mantener solo 5
+        
+        this.render();
+    }
+
+    manejarTeclado(event) {
+        // Mini-reto: Soporte para Enter y Espacio
+        if (event.code === "Space" || event.code === "Enter") {
+            event.preventDefault(); // Evitar scroll con espacio
+            this.registrarAccion("Tecla " + event.code);
+        }
+    }
+
+    reset() {
+        this.clics = 0;
+        this.clicsEnSesion = 0;
+        this.historial = [];
+        this.render();
+    }
+
+    render() {
+        // Actualizar número principal
+        document.getElementById(this.elementoId).innerHTML = this.clics;
+
+        // Actualizar Récord
+        document.getElementById("record-display").innerHTML = `Récord (5s): ${this.record} clics`;
+
+        // Actualizar Lista
+        const lista = document.getElementById("lista-historial");
+        lista.innerHTML = this.historial.map(h => `
+            <div class="item-hist">
+                <strong>#${h.num}</strong> · ${h.fuente} 
+                <span style="float:right; opacity:0.6">${h.hora}</span>
+            </div>
+        `).join("");
+    }
+}
+
+// Iniciar la aplicación
+const miContador = new Contador("num-clics");
+</script>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Mascotas - DinamoDev</title>
+  <style>
+    body { font-family:sans-serif; max-width:600px; margin:30px auto; padding:20px; background:#F0FBF1; }
+    .selector { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .btn-mascota { padding:12px 20px; border:3px solid transparent; border-radius:12px; font-size:22px; cursor:pointer; background:white; transition:all .2s; }
+    .btn-mascota.activa { border-color:#2D6A4F; background:#D8F3DC; }
+    .tarjeta { background:white; border-radius:16px; padding:24px; box-shadow:0 4px 16px rgba(0,0,0,.1); }
+    .stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin:16px 0; }
+    .stat { text-align:center; background:#F0FBF1; padding:12px; border-radius:10px; font-size:14px; }
+    .stat .num { font-size:28px; font-weight:bold; color:#2D6A4F; }
+    .acciones { display:flex; gap:8px; margin-top:14px; flex-wrap: wrap; }
+    .acciones button { flex:1; min-width: 100px; padding:10px; border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:bold; background:#D8F3DC; color:#1B4332; }
+    .btn-bonus { background: #FFCC00 !important; width: 100%; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <h2>🐾 Mis Mascotas</h2>
+  
+  <div class="selector" id="selector"></div>
+
+  <div class="tarjeta">
+    <div id="nombre-actual" style="font-size:22px; font-weight:bold; color:#1B4332"></div>
+    
+    <div class="stats">
+      <div class="stat"><div class="num" id="s-hambre">-</div>🍖 Hambre</div>
+      <div class="stat"><div class="num" id="s-energia">-</div>⚡ Energía</div>
+      <div class="stat"><div class="num" id="s-felicidad">-</div>😊 Felicidad</div>
+    </div>
+
+    <div class="acciones">
+      <button onclick="accion('comer')">🍖 Comer</button>
+      <button onclick="accion('jugar')">🎾 Jugar</button>
+      <button onclick="accion('dormir')">😴 Dormir</button>
+      <button onclick="alimentarATodas()" class="btn-bonus">📢 Alimentar a todas</button>
+    </div>
+
+    <p id="log-2" style="text-align:center; color:#555; font-style:italic; margin-top:15px; min-height: 1.2em;"></p>
+  </div>
+
+<script>
+// --- CLASE MASCOTA ---
+class Mascota {
+    constructor(nombre, emoji) {
+        this.nombre = nombre;
+        this.emoji = emoji;
+        this.hambre = Math.floor(Math.random() * 60) + 20;
+        this.energia = Math.floor(Math.random() * 60) + 30;
+        this.felicidad = Math.floor(Math.random() * 60) + 40;
+    }
+    comer() {
+        this.hambre = Math.max(0, this.hambre - 30);
+        this.energia = Math.min(100, this.energia + 10);
+    }
+    jugar() {
+        this.energia = Math.max(0, this.energia - 25);
+        this.felicidad = Math.min(100, this.felicidad + 20);
+    }
+    dormir() {
+        this.energia = Math.min(100, this.energia + 40);
+    }
+}
+
+// --- ARRAY DE INSTANCIAS ---
+const mascotas = [
+    new Mascota("Fido", "🐶"),
+    new Mascota("Michi", "🐱"),
+    new Mascota("Tweety", "🐦"),
+    new Mascota("Nemo", "🐠"),
+    new Mascota("Draco", "🐉") 
+];
+
+let indiceActual = 0;
+
+// --- FUNCIONES DE LÓGICA ---
+
+function construirSelector() {
+    const cont = document.getElementById("selector");
+    cont.innerHTML = "";
+    mascotas.forEach((m, i) => {
+        const clase = i === indiceActual ? "btn-mascota activa" : "btn-mascota";
+        cont.innerHTML += `<button class="${clase}" onclick="seleccionar(${i})">${m.emoji} ${m.nombre}</button>`;
+    });
+}
+
+function seleccionar(i) {
+    indiceActual = i;
+    construirSelector();
+    renderMascota();
+}
+
+function accion(tipo) {
+    const m = mascotas[indiceActual];
+    if (tipo === "comer") m.comer();
+    if (tipo === "jugar") m.jugar();
+    if (tipo === "dormir") m.dormir();
+    
+    document.getElementById("log-2").innerHTML = `${m.nombre} hizo: ${tipo} ✅`;
+    renderMascota();
+}
+
+function alimentarATodas() {
+    mascotas.forEach(m => m.comer());
+    document.getElementById("log-2").innerHTML = "📢 ¡Todas las mascotas han comido! 🍖";
+    renderMascota();
+}
+
+function mostrarMasFeliz() {
+    let masFeliz = mascotas[0];
+    for (let i = 1; i < mascotas.length; i++) {
+        if (mascotas[i].felicidad > masFeliz.felicidad) {
+            masFeliz = mascotas[i];
+        }
+    }
+    // Añadimos la info al log sin borrar lo anterior si es una acción
+    const log = document.getElementById("log-2");
+    log.innerHTML += `<br><small>🌟 La más feliz es: ${masFeliz.nombre} (${masFeliz.emoji})</small>`;
+}
+
+function renderMascota() {
+    const m = mascotas[indiceActual];
+    document.getElementById("nombre-actual").innerHTML = m.emoji + " " + m.nombre;
+    document.getElementById("s-hambre").innerHTML = m.hambre;
+    document.getElementById("s-energia").innerHTML = m.energia;
+    document.getElementById("s-felicidad").innerHTML = m.felicidad;
+    
+    mostrarMasFeliz();
+}
+
+// --- INICIALIZACIÓN ---
+construirSelector();
+renderMascota();
+
+</script>
+</body>
+</html>

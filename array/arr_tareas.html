@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Tareas Pro</title>
+    <style>
+        body { font-family: sans-serif; max-width: 400px; margin: 20px auto; }
+        .completada { text-decoration: line-through; color: gray; }
+        .tarea { 
+            padding: 8px; 
+            border-bottom: 1px solid #eee; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+        }
+        .controles { margin-bottom: 20px; display: flex; gap: 5px; flex-wrap: wrap; }
+        #contador { font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
+        .btn-limpiar { margin-top: 15px; background-color: #ff4757; color: white; border: none; padding: 8px; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <h1>✅ Mi Lista de Tareas</h1>
+
+    <div id="contador">Cargando tareas...</div>
+
+    <div class="controles">
+        <input type="text" id="inp-tarea" placeholder="Nueva tarea...">
+        <select id="sel-prioridad">
+            <option value="alta">Alta</option>
+            <option value="media" selected>Media</option>
+            <option value="baja">Baja</option>
+        </select>
+        <button onclick="agregarTarea()">Agregar</button>
+    </div>
+
+    <div id="lista-tareas"></div>
+
+    <button class="btn-limpiar" onclick="limpiarCompletadas()">🧹 Limpiar completadas</button>
+
+    <script src="script.js"></script>
+</body>
+<script src="arr_tareas.js"></script>
+</html>

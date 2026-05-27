@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Utilidades Estáticas - JS</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 20px auto; padding: 20px; background: #f4f7f6; }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    input, select, button { width: 100%; padding: 10px; margin-top: 10px; border-radius: 6px; border: 1px solid #ddd; box-sizing: border-box; }
+    button { background: #3498db; color: white; border: none; font-weight: bold; cursor: pointer; }
+    .res-box { margin-top: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; min-height: 20px; }
+    .stat-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #eee; }
+    .badge { background: #e67e22; color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>🔢 Convertidor <span id="badge-conv" class="badge">0</span></h2>
+    <div class="grid">
+      <input type="number" id="valor-conv" placeholder="Valor">
+      <select id="tipo-conv">
+        <option value="kmMillas">km → millas</option>
+        <option value="millaKm">millas → km</option>
+        <option value="cF">°C → °F</option>
+        <option value="fC">°F → °C</option>
+      </select>
+    </div>
+    <button onclick="ejecutarConversion()">Convertir ahora</button>
+    <div class="res-box" id="res-conv">—</div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Estadísticas de Lista</h2>
+    <p style="font-size: 12px; color: #666;">Ingresa números separados por comas (ej: 10, 20, 30)</p>
+    <input type="text" id="lista-nums" placeholder="Ej: 5, 12, 8, 130">
+    <button onclick="ejecutarStats()" style="background: #27ae60;">Calcular Todo</button>
+    <div class="res-box" id="res-stats">Los resultados aparecerán aquí</div>
+  </div>
+
+<script>
+class Calculadora {
+    static totalConversiones = 0;
+
+    static kmAMillas(km) { return km * 0.621371; }
+    static millasAKm(millas) { return millas * 1.60934; }
+    static celsiusAFahr(c) { return (c * 9/5) + 32; }
+    static fahrACelsius(f) { return (f - 32) * 5/9; }
+
+    static convertir(valor, tipo) {
+        Calculadora.totalConversiones++;
+        if (tipo === "kmMillas") return this.kmAMillas(valor);
+        if (tipo === "millaKm") return this.millasAKm(valor);
+        if (tipo === "cF") return this.celsiusAFahr(valor);
+        if (tipo === "fC") return this.fahrACelsius(valor);
+    }
+}
+
+class Estadisticas {
+    static suma(nums) { return nums.reduce((a, b) => a + b, 0); }
+    static promedio(nums) { return this.suma(nums) / nums.length; }
+    static maximo(nums) { return Math.max(...nums); }
+    static minimo(nums) { return Math.min(...nums); }
+    
+    // Mini-reto: Mediana
+    static mediana(nums) {
+        const ordenados = [...nums].sort((a, b) => a - b);
+        const mitad = Math.floor(ordenados.length / 2);
+        return ordenados.length % 2 !== 0 
+            ? ordenados[mitad] 
+            : (ordenados[mitad - 1] + ordenados[mitad]) / 2;
+    }
+
+    static desviacion(nums) {
+        const prom = this.promedio(nums);
+        const sumDif = nums.reduce((acc, n) => acc + (n - prom) ** 2, 0);
+        return Math.sqrt(sumDif / nums.length);
+    }
+}
+
+// Funciones de control
+function ejecutarConversion() {
+    const v = Number(document.getElementById("valor-conv").value);
+    const t = document.getElementById("tipo-conv").value;
+    const res = Calculadora.convertir(v, t);
+    
+    document.getElementById("res-conv").innerText = `Resultado: ${res.toFixed(4)}`;
+    document.getElementById("badge-conv").innerText = Calculadora.totalConversiones;
+}
+
+function ejecutarStats() {
+    const raw = document.getElementById("lista-nums").value;
+    const nums = raw.split(",").map(n => Number(n.trim())).filter(n => !isNaN(n) && n !== 0);
+    
+    if (nums.length === 0) return;
+
+    const data = [
+        ["Suma Total", Estadisticas.suma(nums).toFixed(2)],
+        ["Promedio", Estadisticas.promedio(nums).toFixed(2)],
+        ["Mediana", Estadisticas.mediana(nums).toFixed(2)],
+        ["Máximo", Estadisticas.maximo(nums)],
+        ["Mínimo", Estadisticas.minimo(nums)],
+        ["Desviación Est.", Estadisticas.desviacion(nums).toFixed(2)]
+    ];
+
+    document.getElementById("res-stats").innerHTML = data.map(d => `
+        <div class="stat-row">
+            <span>${d[0]}</span>
+            <strong>${d[1]}</strong>
+        </div>
+    `).join("");
+}
+</script>
+</body>
+</html>

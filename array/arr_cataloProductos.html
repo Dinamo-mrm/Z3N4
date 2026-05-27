@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛍 Mi Catálogo Pro - CRUD & Carrito</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
+        h1 { text-align: center; color: #1e293b; }
+
+        /* Formulario y Buscador */
+        .form-group, .search-bar { 
+            background: var(--card-bg); padding: 20px; border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); margin-bottom: 20px;
+            display: flex; gap: 10px; flex-wrap: wrap;
+        }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; flex: 1; min-width: 120px; }
+        button { 
+            padding: 10px 20px; background: var(--primary); color: white; 
+            border: none; border-radius: 6px; cursor: pointer; transition: 0.3s;
+        }
+        button:hover { opacity: 0.9; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Estadísticas */
+        .stats-panel { 
+            display: flex; justify-content: space-around; background: #1e293b; 
+            color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;
+        }
+
+        /* Layout Principal */
+        .main-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+
+        /* Grid de Productos */
+        .grid-catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .card { 
+            background: white; padding: 15px; border-radius: 10px; text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #eee;
+        }
+        .card .emoji { font-size: 3rem; margin-bottom: 10px; }
+        .card h3 { margin: 5px 0; font-size: 1.1rem; }
+        .card .precio { font-weight: bold; color: var(--primary); font-size: 1.2rem; }
+        .card .cat { font-size: 0.8rem; color: #64748b; text-transform: uppercase; }
+        .card .stock { margin: 10px 0; font-size: 0.9rem; }
+        .btn-delete { background: #ef4444; margin-top: 5px; width: 100%; }
+
+        /* Carrito Side */
+        .carrito-sidebar { 
+            background: white; padding: 20px; border-radius: 12px; 
+            border: 2px solid var(--primary); height: fit-content;
+            position: sticky; top: 20px;
+        }
+        #lista-carrito { max-height: 400px; overflow-y: auto; margin-bottom: 15px; }
+        .item-carrito { font-size: 0.9rem; border-bottom: 1px solid #eee; padding: 5px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🛍 Mi Catálogo de Productos Pro</h1>
+
+    <div class="form-group">
+        <input type="text" id="inp-nombre" placeholder="Nombre (ej. Mouse)">
+        <input type="number" id="inp-precio" placeholder="Precio ($)">
+        <input type="text" id="inp-cat" placeholder="Categoría (ej. Tech)">
+        <input type="text" id="inp-emoji" placeholder="Emoji (ej. 🖱)">
+        <input type="number" id="inp-stock" placeholder="Stock Inicial">
+        <button onclick="agregarProducto()">Agregar al catálogo ➕</button>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="buscador" placeholder="🔍 Buscar por nombre o categoría..." oninput="render()">
+    </div>
+
+    <div id="resumen" class="stats-panel"></div>
+
+    <div class="main-layout">
+        <div id="catalogo" class="grid-catalogo"></div>
+        
+        <div class="carrito-sidebar">
+            <h2>🛒 Carrito</h2>
+            <div id="lista-carrito">
+                <p style="color: #94a3b8;">El carrito está vacío</p>
+            </div>
+            <hr>
+            <div id="total-carrito" style="font-size: 1.2rem; font-weight: bold;">Total: $0.00</div>
+            <button onclick="vaciarCarrito()" style="width: 100%; margin-top: 10px; background: #64748b;">Vaciar Carrito</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Estado Inicial
+    let productos = [
+        { nombre: "Auriculares", precio: 59.99, categoria: "Electrónica", emoji: "🎧", stock: 5 },
+        { nombre: "Mochila", precio: 34.50, categoria: "Accesorios", emoji: "🎒", stock: 2 },
+        { nombre: "Taza Mágica", precio: 12.00, categoria: "Hogar", emoji: "☕", stock: 0 },
+        { nombre: "Teclado RGB", precio: 89.99, categoria: "Electrónica", emoji: "⌨", stock: 8 }
+    ];
+
+    let carrito = [];
+
+    // 2. Funciones de Lógica
+    function agregarProducto() {
+        const nombre = document.getElementById("inp-nombre").value;
+        const precio = Number(document.getElementById("inp-precio").value);
+        const categoria = document.getElementById("inp-cat").value;
+        const emoji = document.getElementById("inp-emoji").value || "📦";
+        const stock = Number(document.getElementById("inp-stock").value) || 0;
+
+        if (!nombre || !precio || !categoria) {
+            alert("Completa nombre, precio y categoría");
+            return;
+        }
+
+        productos.push({ nombre, precio, categoria, emoji, stock });
+        limpiarFormulario();
+        render();
+    }
+
+    function eliminarProducto(index) {
+        productos.splice(index, 1);
+        render();
+    }
+
+    function agregarAlCarrito(index) {
+        const p = productos[index];
+        if (p.stock > 0) {
+            carrito.push({ nombre: p.nombre, precio: p.precio });
+            p.stock--; // Reducir stock del inventario
+            render();
+        }
+    }
+
+    function vaciarCarrito() {
+        carrito = [];
+        render();
+    }
+
+    function limpiarFormulario() {
+        ["inp-nombre", "inp-precio", "inp-cat", "inp-emoji", "inp-stock"].forEach(id => {
+            document.getElementById(id).value = "";
+        });
+    }
+
+    // 3. Renderizado y Cálculos
+    function calcularResumen() {
+        const totalItems = productos.length;
+        const sumaTotal = productos.reduce((acc, p) => acc + p.precio, 0);
+        const promedio = totalItems > 0 ? (sumaTotal / totalItems).toFixed(2) : 0;
+
+        document.getElementById("resumen").innerHTML = `
+            <div><strong>${totalItems}</strong> Productos</div>
+            <div><strong>$${promedio}</strong> Promedio</div>
+            <div><strong>$${sumaTotal.toFixed(2)}</strong> Valor Inventario</div>
+        `;
+    }
+
+    function render() {
+        const catalogo = document.getElementById("catalogo");
+        const busqueda = document.getElementById("buscador").value.toLowerCase();
+        catalogo.innerHTML = "";
+
+        // Filtrar y Renderizar Catálogo
+        productos.forEach((p, i) => {
+            if (p.nombre.toLowerCase().includes(busqueda) || p.categoria.toLowerCase().includes(busqueda)) {
+                
+                const sinStock = p.stock === 0;
+                const stockEtiqueta = sinStock 
+                    ? `<span style="color:red; font-weight:bold;">⚠ Sin stock</span>` 
+                    : `Stock: ${p.stock}`;
+
+                catalogo.innerHTML += `
+                    <div class="card">
+                        <div class="emoji">${p.emoji}</div>
+                        <h3>${p.nombre}</h3>
+                        <p class="precio">$${p.precio.toFixed(2)}</p>
+                        <p class="cat">${p.categoria}</p>
+                        <p class="stock">${stockEtiqueta}</p>
+                        <button onclick="agregarAlCarrito(${i})" ${sinStock ? 'disabled' : ''}>
+                            ${sinStock ? 'Agotado' : '🛒 Comprar'}
+                        </button>
+                        <button class="btn-delete" onclick="eliminarProducto(${i})">🗑 Quitar</button>
+                    </div>
+                `;
+            }
+        });
+
+        // Renderizar Carrito
+        const listaCarrito = document.getElementById("lista-carrito");
+        const totalCarrito = document.getElementById("total-carrito");
+        
+        if (carrito.length === 0) {
+            listaCarrito.innerHTML = `<p style="color: #94a3b8;">El carrito está vacío</p>`;
+            totalCarrito.innerHTML = "Total: $0.00";
+        } else {
+            listaCarrito.innerHTML = "";
+            let sumaCarrito = 0;
+            carrito.forEach(item => {
+                listaCarrito.innerHTML += `
+                    <div class="item-carrito">
+                        <b>${item.nombre}</b> - $${item.precio.toFixed(2)}
+                    </div>
+                `;
+                sumaCarrito += item.precio;
+            });
+            totalCarrito.innerHTML = `Total: $${sumaCarrito.toFixed(2)}`;
+        }
+
+        calcularResumen();
+    }
+
+    // Carga inicial
+    render();
+</script>
+
+</body>
+<script src="arr_cataloProductos.js"></script>
+</html>

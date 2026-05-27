@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+  <h2>🖼 Galería de Paisajes</h2> 
+ 
+  <div id="galeria" 
+       style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); 
+              gap:16px;"> 
+  </div> 
+ 
+  <div id="modal-info" 
+       style="display:none; margin-top:24px; padding:20px; 
+              background:#EBF5FB; border-radius:12px; 
+              border-left:4px solid #2E86C1;"> 
+  </div> 
+ <div class="controles">
+  <label for="filtroCategoria">Filtrar por:</label>
+  <select id="filtroCategoria" onchange="renderGaleria()">
+    <option value="Todas">Todas</option>
+    <option value="Naturaleza">Naturaleza</option>
+    <option value="Mar">Mar</option>
+    <option value="Urbano">Urbano</option>
+    <option value="Agua">Agua</option>
+  </select>
+</div>
+
+<div id="galeria" class="grid-galeria"></div>
+
+<div id="modal-info" style="display:none; border: 1px solid #ccc; padding: 20px; margin-top: 20px;"></div>
+  <style> 
+    body { font-family:sans-serif; max-width:700px; margin:40px auto; padding:20px; } 
+    .tarjeta { 
+      border-radius:12px; overflow:hidden; 
+      box-shadow:0 2px 12px rgba(0,0,0,0.12); 
+      cursor:pointer; transition:transform 0.2s; 
+      background:white; 
+    } 
+    .tarjeta:hover { transform:translateY(-6px); } 
+    .tarjeta img  { width:100%; height:150px; object-fit:cover; display:block; } 
+    .tarjeta-info { padding:12px; } 
+    .tarjeta-nombre { font-weight:bold; font-size:15px; color:#1A5276; } 
+    .tarjeta-cat    { font-size:12px; color:#888; margin-top:4px; } 
+    .badge-cat { 
+      display:inline-block; background:#D6EAF8; color:#1A5276; 
+      padding:2px 8px; border-radius:999px; font-size:11px; 
+    } 
+  </style> 
+   <script src="arrgaleriafotos.js"></script>
+</body>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco Virtual POO - DinamoDev</title>
+    <link rel="stylesheet" href="Poo_bancocajero.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2 style="margin:0">🏛 Banco Virtual POO</h2>
+    </div>
+
+    <div class="nav">
+        <button class="tab activa" onclick="mostrarTab('cuentas', event)"> Nuevo Cuentas</button>
+        <button class="tab" onclick="mostrarTab('nueva', event)">➕ Nueva</button>
+        <button class="tab" onclick="mostrarTab('stats', event)">📊 Stats</button>
+    </div>
+
+    <div class="content">
+        <div id="tab-cuentas">
+            <div id="lista-cuentas" class="lista-cuentas"></div>
+            <div id="panel-cuenta">
+                </div>
+        </div>
+
+        <div id="tab-nueva" class="hidden">
+            <h3>Crear Nueva Cuenta</h3>
+            <div class="form-group">
+                <input type="text" id="nw-titular" placeholder="Nombre del titular">
+                <input type="number" id="nw-saldo" placeholder="Saldo inicial ($)">
+                <select id="nw-tipo">
+                    <option value="ahorro">💰 Cuenta de Ahorro (2%)</option>
+                    <option value="corriente">🏦 Cuenta Corriente (Sobregiro $200)</option>
+                    <option value="joven">✨ Cuenta Joven (3.5% - Límite $500)</option>
+                </select>
+                <button class="btn-main" onclick="banco.crearCuenta()">Registrar en Sistema</button>
+            </div>
+        </div>
+
+        <div id="tab-stats" class="hidden">
+            <h3>Estadísticas Globales</h3>
+            <div id="stat-grid"></div>
+        </div>
+    </div>
+</div>
+
+<script src="Poo_bancocajero.js"></script>
+</body>
+</html>

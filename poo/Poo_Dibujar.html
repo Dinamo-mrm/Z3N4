@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Figuras Geométricas - Herencia y Polimorfismo</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; background: #f0f4f8; }
+    .panel { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    canvas { background: #fff; border: 1px solid #ddd; display: block; margin: 20px auto; border-radius: 8px; }
+    .controles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+    .full-width { grid-column: span 2; }
+    label { font-size: 13px; color: #666; display: block; margin-bottom: 4px; }
+    select, input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    button { padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .btn-draw { background: #2196F3; color: white; }
+    .btn-all { background: #FFC107; color: #333; }
+    button:hover { opacity: 0.8; }
+    #info-figura { text-align: center; font-weight: bold; color: #333; margin-top: 10px; min-height: 1.2em; }
+  </style>
+</head>
+<body>
+
+<div class="panel">
+  <h2>🔷 Figuras Geométricas</h2>
+  
+  <div class="controles">
+    <div>
+      <label>Tipo de Figura:</label>
+      <select id="tipo">
+        <option value="circulo">⭕ Círculo</option>
+        <option value="rectangulo">█ Rectángulo</option>
+        <option value="triangulo">▲ Triángulo</option>
+        <option value="rombo">🔷 Rombo</option>
+      </select>
+    </div>
+    <div>
+      <label>Color:</label>
+      <input type="color" id="color-fig" value="#2196F3">
+    </div>
+    <div>
+      <label id="label-v1">Valor 1 (Radio/Ancho/Base):</label>
+      <input type="number" id="v1" value="50">
+    </div>
+    <div>
+      <label id="label-v2">Valor 2 (Alto/Altura):</label>
+      <input type="number" id="v2" value="50">
+    </div>
+    <button class="btn-draw" onclick="dibujar()">▶ Dibujar Selección</button>
+    <button class="btn-all" onclick="dibujarTodas()">🎨 Dibujar Todas</button>
+  </div>
+
+  <canvas id="lienzo" width="560" height="220"></canvas>
+  <div id="info-figura">Selecciona una figura para ver su área</div>
+</div>
+
+<script>
+// --- CLASE PADRE ---
+class Figura {
+    constructor(color) {
+        this.color = color;
+    }
+    area() { return 0; }
+    descripcion() {
+        return `Figura con área: ${this.area().toFixed(2)}`;
+    }
+}
+
+// --- CLASES HIJAS ---
+
+class Circulo extends Figura {
+    constructor(radio, color) {
+        super(color);
+        this.radio = radio;
+    }
+    area() { return Math.PI * Math.pow(this.radio, 2); }
+    perimetro() { return 2 * Math.PI * this.radio; }
+    
+    // Override de descripción (Mini-reto)
+    descripcion() {
+        return `⭕ Círculo | Área: ${this.area().toFixed(2)} | Perímetro: ${this.perimetro().toFixed(2)}`;
+    }
+    
+    dibujarEn(ctx, cx, cy) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(cx, cy, this.radio, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+class Rectangulo extends Figura {
+    constructor(ancho, alto, color) {
+        super(color);
+        this.ancho = ancho;
+        this.alto = alto;
+    }
+    area() { return this.ancho * this.alto; }
+    dibujarEn(ctx, cx, cy) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(cx - this.ancho/2, cy - this.alto/2, this.ancho, this.alto);
+    }
+}
+
+class Triangulo extends Figura {
+    constructor(base, altura, color) {
+        super(color);
+        this.base = base;
+        this.altura = altura;
+    }
+    area() { return (this.base * this.altura) / 2; }
+    dibujarEn(ctx, cx, cy) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - this.altura/2);
+        ctx.lineTo(cx + this.base/2, cy + this.altura/2);
+        ctx.lineTo(cx - this.base/2, cy + this.altura/2);
+        ctx.closePath();
+        ctx.fill();
+    }
+}
+
+// Nueva Clase Rombo (Mini-reto)
+class Rombo extends Figura {
+    constructor(d1, d2, color) {
+        super(color);
+        this.d1 = d1;
+        this.d2 = d2;
+    }
+    area() { return (this.d1 * this.d2) / 2; }
+    dibujarEn(ctx, cx, cy) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - this.d2 / 2); // Arriba
+        ctx.lineTo(cx + this.d1 / 2, cy); // Derecha
+        ctx.lineTo(cx, cy + this.d2 / 2); // Abajo
+        ctx.lineTo(cx - this.d1 / 2, cy); // Izquierda
+        ctx.closePath();
+        ctx.fill();
+    }
+}
+
+// --- LÓGICA DE LA INTERFAZ ---
+
+function dibujar() {
+    const tipo = document.getElementById("tipo").value;
+    const v1 = Number(document.getElementById("v1").value);
+    const v2 = Number(document.getElementById("v2").value);
+    const color = document.getElementById("color-fig").value;
+    
+    const canvas = document.getElementById("lienzo");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let figura;
+    if (tipo === "circulo") figura = new Circulo(v1, color);
+    else if (tipo === "rectangulo") figura = new Rectangulo(v1, v2, color);
+    else if (tipo === "triangulo") figura = new Triangulo(v1, v2, color);
+    else if (tipo === "rombo") figura = new Rombo(v1, v2, color);
+
+    figura.dibujarEn(ctx, canvas.width/2, canvas.height/2);
+    document.getElementById("info-figura").innerHTML = figura.descripcion();
+}
+
+function dibujarTodas() {
+    const canvas = document.getElementById("lienzo");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Array de instancias usando polimorfismo
+    const figuras = [
+        new Circulo(35, "#F44336"),
+        new Rectangulo(70, 50, "#4CAF50"),
+        new Triangulo(70, 60, "#2196F3"),
+        new Rombo(70, 50, "#9C27B0")
+    ];
+
+    const espacio = canvas.width / (figuras.length + 1);
+
+    figuras.forEach((fig, i) => {
+        fig.dibujarEn(ctx, espacio * (i + 1), canvas.height / 2);
+    });
+
+    document.getElementById("info-figura").innerHTML = "🌟 Mostrando la jerarquía de Figuras";
+}
+
+// Dibujar algo al cargar
+dibujar();
+</script>
+
+</body>
+</html>

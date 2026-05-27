@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cuenta Bancaria - Encapsulamiento</title>
+  <style>
+    body { font-family:sans-serif; max-width:480px; margin:40px auto; padding:20px; background:#FFF5F5; }
+    .banco { background:white; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(192,57,43,.15); }
+    .saldo { text-align:center; font-size:52px; font-weight:bold; color:#B03A2E; margin:8px 0; }
+    .titular { text-align:center; color:#888; font-size:15px; margin-bottom:20px; }
+    .fila { display:flex; gap:8px; margin-bottom:10px; }
+    input { flex:1; padding:10px; font-size:16px; border:2px solid #FADADD; border-radius:8px; outline: none; }
+    input:focus { border-color: #B03A2E; }
+    .btn-dep { padding:10px 18px; background:#A9DFBF; color:#1B4332; border:none; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; }
+    .btn-ret { padding:10px 18px; background:#FADADD; color:#7D2200; border:none; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; }
+    #historial { margin-top:16px; max-height:200px; overflow-y:auto; border-top: 1px solid #eee; padding-top: 10px; }
+    .mov { font-size:14px; padding:8px 12px; border-radius:6px; margin-bottom:6px; display: flex; justify-content: space-between; }
+    .entrada { background:#F0FDF4; color:#166534; border-left: 4px solid #22C55E; }
+    .salida  { background:#FEF2F2; color:#991B1B; border-left: 4px solid #EF4444; }
+    .error   { color:#B91C1C; font-size:14px; text-align:center; margin-top:8px; min-height: 1.2em; }
+  </style>
+</head>
+<body>
+
+  <div class="banco">
+    <div class="titular">👤 Cuenta de: <strong id="titular">—</strong></div>
+    <div class="saldo">$<span id="saldo-display">0.00</span></div>
+    
+    <div class="fila">
+      <input id="monto" type="number" placeholder="Monto" min="0">
+      <button class="btn-dep" onclick="depositarBtn()">⬆ Depositar</button>
+      <button class="btn-ret" onclick="retirarBtn()">⬇ Retirar</button>
+    </div>
+    
+    <p id="error-msg" class="error"></p>
+    
+    <div id="historial"></div>
+  </div>
+
+<script>
+class CuentaBancaria {
+    #saldo = 0;
+    #historial = [];
+
+    constructor(titular, saldoInicial = 0) {
+        this.titular = titular;
+        if (saldoInicial > 0) {
+            this.#saldo = saldoInicial;
+            this.#historial.push({ tipo: "apertura", monto: saldoInicial });
+        }
+    }
+
+    get saldo() { return this.#saldo; }
+
+    get resumen() {
+        return `Titular: ${this.titular} | Saldo: $${this.saldo.toFixed(2)} | Movimientos: ${this.#historial.length}`;
+    }
+
+    depositar(monto) {
+        if (isNaN(monto) || monto <= 0) throw new Error("Monto inválido para depositar");
+        this.#saldo += monto;
+        this.#historial.push({ tipo: "deposito", monto });
+        return this;
+    }
+
+    retirar(monto) {
+        if (isNaN(monto) || monto <= 0) throw new Error("Monto inválido para retirar");
+        if (monto > this.#saldo) throw new Error("Saldo insuficiente");
+        this.#saldo -= monto;
+        this.#historial.push({ tipo: "retiro", monto });
+        return this;
+    }
+
+    getHistorial() {
+        return [...this.#historial];
+    }
+}
+
+// 1. Instanciamos la cuenta (Carlos, como en tu ejemplo)
+const miCuenta = new CuentaBancaria("Carlos Eduardo", 1000);
+
+// 2. Función para actualizar la pantalla (Render)
+function render() {
+    document.getElementById("titular").innerText = miCuenta.titular;
+    document.getElementById("saldo-display").innerText = miCuenta.saldo.toFixed(2);
+    
+    const listaHistorial = document.getElementById("historial");
+    listaHistorial.innerHTML = "";
+    
+    // Obtenemos historial y lo mostramos del más reciente al más antiguo
+    const movimientos = miCuenta.getHistorial().reverse();
+    
+    movimientos.forEach(mov => {
+        const div = document.createElement("div");
+        const esSalida = mov.tipo === "retiro";
+        div.className = `mov ${esSalida ? 'salida' : 'entrada'}`;
+        div.innerHTML = `
+            <span>${mov.tipo.toUpperCase()}</span>
+            <strong>${esSalida ? '-' : '+'}$${mov.monto.toFixed(2)}</strong>
+        `;
+        listaHistorial.appendChild(div);
+    });
+}
+
+// 3. Funciones para los botones
+function depositarBtn() {
+    const input = document.getElementById("monto");
+    const monto = parseFloat(input.value);
+    const errorMsg = document.getElementById("error-msg");
+    
+    try {
+        miCuenta.depositar(monto);
+        errorMsg.innerText = "";
+        input.value = ""; // Limpiar input
+        render();
+    } catch (e) {
+        errorMsg.innerText = "⚠️ " + e.message;
+    }
+}
+
+function retirarBtn() {
+    const input = document.getElementById("monto");
+    const monto = parseFloat(input.value);
+    const errorMsg = document.getElementById("error-msg");
+    
+    try {
+        miCuenta.retirar(monto);
+        errorMsg.innerText = "";
+        input.value = "";
+        render();
+    } catch (e) {
+        errorMsg.innerText = "⚠️ " + e.message;
+    }
+}
+
+// Inicializar la vista
+render();
+</script>
+</body>
+</html>

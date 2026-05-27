@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrito Pro - Composición y Lógica</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 900px; margin: 30px auto; padding: 20px; background: #FEF9E7; color: #444; }
+    .tienda { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+    
+    /* Panel de Catálogo */
+    .catalogo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 15px; }
+    .prod-card { background: white; border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; border: 2px solid transparent; }
+    .prod-card:hover { transform: translateY(-5px); border-color: #F1C40F; }
+    .prod-card.agotado { opacity: 0.6; filter: grayscale(1); border-color: #ddd; }
+    .prod-card .emoji { font-size: 40px; margin-bottom: 10px; }
+    .prod-card .nombre { font-weight: bold; font-size: 16px; }
+    .prod-card .precio { color: #D4830A; font-weight: bold; margin: 5px 0; }
+    .prod-card .stock { font-size: 12px; color: #888; margin-bottom: 10px; }
+    .prod-card button { width: 100%; padding: 8px; border: none; border-radius: 6px; background: #F1C40F; color: #7D6608; font-weight: bold; cursor: pointer; }
+    .prod-card button:disabled { background: #eee; color: #aaa; cursor: not-allowed; }
+
+    /* Panel de Carrito */
+    .carrito-panel { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); height: fit-content; }
+    .lista-items { margin: 15px 0; max-height: 300px; overflow-y: auto; }
+    .item-carrito { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #FFF9C4; border-radius: 8px; margin-bottom: 8px; font-size: 14px; }
+    .quitar { background: #E74C3C; color: white; border: none; border-radius: 4px; padding: 2px 8px; cursor: pointer; }
+    
+    .total-box { background: #FCF3CF; border-radius: 10px; padding: 15px; margin-top: 15px; text-align: center; }
+    .total-main { font-size: 24px; font-weight: bold; color: #D4830A; }
+    .ahorro-msg { color: #27AE60; font-size: 14px; font-weight: bold; margin-top: 5px; }
+    
+    .acciones-carrito { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
+    .btn-vaciar { background: #eee; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
+    .btn-cupon { background: #27AE60; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>🛒 Carrito de Compras Pro</h1>
+
+  <div class="tienda">
+    <section>
+      <h3>📦 Catálogo de Productos</h3>
+      <div id="catalogo" class="catalogo-grid"></div>
+    </section>
+
+    <aside class="carrito-panel">
+      <h3>🛒 Mi Carrito (<span id="cant-items">0</span>)</h3>
+      <div id="lista-carrito" class="lista-items">
+        </div>
+
+      <div id="total-box" class="total-box">
+        <div class="total-main" id="display-total">$0.00</div>
+        <div id="display-ahorro" class="ahorro-msg"></div>
+      </div>
+
+      <div class="acciones-carrito">
+        <button class="btn-vaciar" onclick="vaciarCarrito()">🗑 Vaciar</button>
+        <button class="btn-cupon" onclick="aplicarDescuento(10)">🎟 Cupón 10%</button>
+      </div>
+    </aside>
+  </div>
+
+<script>
+// --- CLASES ---
+
+class Producto {
+  constructor(nombre, precio, emoji, stock = 5) {
+    this.nombre = nombre;
+    this.precio = precio;
+    this.emoji  = emoji;
+    this.stock  = stock;
+  }
+}
+
+class Carrito {
+  constructor() {
+    this.items = [];
+    this.descuentoPorcentaje = 0;
+  }
+
+  agregar(producto) {
+    if (producto.stock <= 0) return;
+
+    const itemExistente = this.items.find(it => it.producto.nombre === producto.nombre);
+    
+    if (itemExistente) {
+      itemExistente.cantidad++;
+    } else {
+      this.items.push({ producto, cantidad: 1 });
+    }
+    
+    producto.stock--; // Reducir stock del catálogo
+  }
+
+  quitar(indice) {
+    const item = this.items[indice];
+    item.producto.stock++; // Devolver stock
+    
+    if (item.cantidad > 1) {
+      item.cantidad--;
+    } else {
+      this.items.splice(indice, 1);
+    }
+  }
+
+  vaciar() {
+    // Devolver todos los stocks antes de limpiar
+    this.items.forEach(it => it.producto.stock += it.cantidad);
+    this.items = [];
+    this.descuentoPorcentaje = 0;
+  }
+
+  aplicarDescuento(porcentaje) {
+    this.descuentoPorcentaje = porcentaje;
+  }
+
+  get totalBruto() {
+    return this.items.reduce((total, it) => total + (it.producto.precio * it.cantidad), 0);
+  }
+
+  get ahorro() {
+    return this.totalBruto * (this.descuentoPorcentaje / 100);
+  }
+
+  get totalFinal() {
+    return this.totalBruto - this.ahorro;
+  }
+}
+
+// --- INSTANCIAS ---
+
+const catalogo = [
+  new Producto("Manzana", 1.20, "🍎", 10),
+  new Producto("Banana", 0.80, "🍌", 12),
+  new Producto("Leche", 2.50, "🥛", 5),
+  new Producto("Pan", 1.80, "🍞", 8),
+  new Producto("Queso", 4.30, "🧀", 3),
+  new Producto("Café", 3.60, "☕", 6),
+];
+
+const carrito = new Carrito();
+
+// --- FUNCIONES DE INTERFAZ ---
+
+function renderCatalogo() {
+  const cont = document.getElementById("catalogo");
+  cont.innerHTML = "";
+  
+  catalogo.forEach((prod, index) => {
+    const agotado = prod.stock === 0;
+    cont.innerHTML += `
+      <div class="prod-card ${agotado ? 'agotado' : ''}">
+        <div class="emoji">${prod.emoji}</div>
+        <div class="nombre">${prod.nombre}</div>
+        <div class="precio">$${prod.precio.toFixed(2)}</div>
+        <div class="stock">Stock: ${prod.stock}</div>
+        <button onclick="agregarAlCarrito(${index})" ${agotado ? 'disabled' : ''}>
+          ${agotado ? 'Sin Stock' : 'Añadir'}
+        </button>
+      </div>
+    `;
+  });
+}
+
+function renderCarrito() {
+  const lista = document.getElementById("lista-carrito");
+  lista.innerHTML = "";
+  let cuentaTotalItems = 0;
+
+  carrito.items.forEach((item, index) => {
+    cuentaTotalItems += item.cantidad;
+    const subtotal = item.producto.precio * item.cantidad;
+    
+    lista.innerHTML += `
+      <div class="item-carrito">
+        <div>
+          <strong>${item.producto.emoji} ${item.producto.nombre}</strong><br>
+          <small>x${item.cantidad} — $${subtotal.toFixed(2)}</small>
+        </div>
+        <button class="quitar" onclick="quitarDelCarrito(${index})">×</button>
+      </div>
+    `;
+  });
+
+  // Actualizar indicadores
+  document.getElementById("cant-items").innerText = cuentaTotalItems;
+  document.getElementById("display-total").innerText = `$${carrito.totalFinal.toFixed(2)}`;
+  
+  const ahorroDiv = document.getElementById("display-ahorro");
+  if (carrito.ahorro > 0) {
+    ahorroDiv.innerText = `✨ ¡Ahorraste $${carrito.ahorro.toFixed(2)}!`;
+  } else {
+    ahorroDiv.innerText = "";
+  }
+}
+
+// --- EVENTOS ---
+
+function agregarAlCarrito(index) {
+  carrito.agregar(catalogo[index]);
+  renderCatalogo();
+  renderCarrito();
+}
+
+function quitarDelCarrito(index) {
+  carrito.quitar(index);
+  renderCatalogo();
+  renderCarrito();
+}
+
+function vaciarCarrito() {
+  carrito.vaciar();
+  renderCatalogo();
+  renderCarrito();
+}
+
+function aplicarDescuento(porcentaje) {
+  if (carrito.items.length === 0) return alert("¡El carrito está vacío!");
+  carrito.aplicarDescuento(porcentaje);
+  renderCarrito();
+}
+
+// Inicialización
+renderCatalogo();
+renderCarrito();
+
+</script>
+</body>
+</html>

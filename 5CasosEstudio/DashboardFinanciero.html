@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financiero Pro</title>
+    <link rel="stylesheet" href="DashboardFinanciero.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dashboard Financiero</h1>
+        </header>
+
+        <!-- Formulario con atributos 'name' obligatorios -->
+        <section class="card">
+            <h2>Nueva Transacción</h2>
+            <form id="financeForm">
+                <input type="text" name="concepto" placeholder="Concepto (ej. Salario)" required>
+                <input type="number" name="monto" placeholder="Monto" min="0.01" step="0.01" required>
+                <select name="tipo">
+                    <option value="ingreso">Ingreso</option>
+                    <option value="gasto">Gasto</option>
+                </select>
+                <input type="text" name="categoria" placeholder="Categoría" required>
+                <input type="date" name="fecha" id="inputFecha" required>
+                <button type="submit">Agregar</button>
+            </form>
+        </section>
+
+        <section class="summary card">
+            <div class="filter-group">
+                <label>Filtrar por Mes:</label>
+                <input type="month" id="filtroMes">
+            </div>
+            <div id="balanceDisplay">
+                <h3>Balance Total: <span id="totalBalance">$0.00</span></h3>
+            </div>
+        </section>
+
+        <div class="grid">
+            <section class="card">
+                <h2>Historial</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Concepto</th>
+                                <th>Categoría</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCuerpo"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Gastos por Categoría</h2>
+                <div id="chartContainer">
+                    <svg id="pieChart" viewBox="-1 -1 2 2"></svg>
+                </div>
+                <div id="leyenda" class="legend"></div>
+            </section>
+        </div>
+    </div>
+    <script src="DashboardFinanciero.js"></script>
+</body>
+</html>

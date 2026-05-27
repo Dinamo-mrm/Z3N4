@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Mascota Virtual - POO</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; background: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        #emoji-mascota { font-size: 80px; margin: 10px 0; display: block; }
+        .stat-container { margin: 10px 0; text-align: left; }
+        .barra-fondo { background: #eee; height: 10px; border-radius: 5px; overflow: hidden; }
+        .barra-progreso { background: #4caf50; height: 100%; width: 0%; transition: width 0.3s; }
+        .controles { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        button { padding: 10px; cursor: pointer; border: none; border-radius: 5px; background: #007bff; color: white; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        #log { margin-top: 15px; font-size: 0.9em; color: #555; font-style: italic; min-height: 1.2em; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 id="nombre-mascota">Cargando...</h2>
+    <span id="emoji-mascota">🐶</span>
+    <p id="info-edad">Edad: 0 | Nivel: 1</p>
+
+    <div class="stat-container">
+        <label>🍖 Hambre: <span id="val-hambre">0</span></label>
+        <div class="barra-fondo"><div id="barra-hambre" class="barra-progreso"></div></div>
+    </div>
+
+    <div class="stat-container">
+        <label>⚡ Energía: <span id="val-energia">0</span></label>
+        <div class="barra-fondo"><div id="barra-energia" class="barra-progreso" style="background: #ff9800;"></div></div>
+    </div>
+
+    <div class="stat-container">
+        <label>😊 Felicidad: <span id="val-felicidad">0</span></label>
+        <div class="barra-fondo"><div id="barra-felicidad" class="barra-progreso" style="background: #e91e63;"></div></div>
+    </div>
+
+    <div id="log">¡Bienvenido!</div>
+
+    <div class="controles">
+        <button onclick="miMascota.comer()">🍖 Comer</button>
+        <button onclick="miMascota.jugar()">🎾 Jugar</button>
+        <button onclick="miMascota.dormir()">😴 Dormir</button>
+        <button onclick="miMascota.cumpleaños()" style="background: #6f42c1;">🎂 Cumple</button>
+    </div>
+</div>
+
+<script>
+class Mascota {
+    constructor(nombre, emoji) {
+        this.nombre = nombre;
+        this.emojiOriginal = emoji; 
+        this.hambre = 50;
+        this.energia = 80;
+        this.felicidad = 70;
+        
+        // Propiedades del Reto
+        this.edad = 0;
+        this.nivel = 1;
+    }
+
+    // Método del Reto
+    cumpleaños() {
+        this.edad++;
+        this.actualizarUI(`¡Feliz cumpleaños! 🎂 Ahora tengo ${this.edad} años.`);
+    }
+
+    comer() {
+        this.hambre = Math.max(0, this.hambre - 30);
+        this.energia = Math.min(100, this.energia + 10);
+        this.felicidad = Math.min(100, this.felicidad + 5);
+        this.revisarNivel();
+        this.actualizarUI("¡Qué rico! 😋 Hambre reducida.");
+    }
+
+    jugar() {
+        if (this.energia < 20) {
+            this.actualizarUI("Estoy muy cansado para jugar... 😴");
+            return;
+        }
+        this.energia = Math.max(0, this.energia - 25);
+        this.hambre = Math.min(100, this.hambre + 15);
+        this.felicidad = Math.min(100, this.felicidad + 20);
+        this.revisarNivel();
+        this.actualizarUI("¡Woof! Qué divertido 🎾");
+    }
+
+    dormir() {
+        this.energia = Math.min(100, this.energia + 40);
+        this.felicidad = Math.min(100, this.felicidad + 10);
+        this.revisarNivel();
+        this.actualizarUI("Zzzz... 😴 Energía recuperada.");
+    }
+
+    // Lógica del Reto: Subir nivel si felicidad llega a 100
+    revisarNivel() {
+        if (this.felicidad >= 100) {
+            this.nivel++;
+            this.felicidad = 50; // Reset parcial para seguir jugando
+            this.actualizarUI("¡SÚPER! Subiste al nivel " + this.nivel + " ⭐");
+        }
+    }
+
+    actualizarUI(mensaje) {
+        document.getElementById("nombre-mascota").innerHTML = this.nombre;
+        document.getElementById("info-edad").innerHTML = `Edad: ${this.edad} | Nivel: ${this.nivel}`;
+        document.getElementById("val-hambre").innerHTML = this.hambre;
+        document.getElementById("val-energia").innerHTML = this.energia;
+        document.getElementById("val-felicidad").innerHTML = this.felicidad;
+
+        // Bonus: Cambio de emoji según estado
+        let emojiActual = this.emojiOriginal;
+        if (this.hambre > 80) emojiActual = "😢"; 
+        if (this.felicidad > 80) emojiActual = "😄";
+        document.getElementById("emoji-mascota").innerHTML = emojiActual;
+
+        // Barras
+        document.getElementById("barra-hambre").style.width = this.hambre + "%";
+        document.getElementById("barra-energia").style.width = this.energia + "%";
+        document.getElementById("barra-felicidad").style.width = this.felicidad + "%";
+        document.getElementById("log").innerHTML = mensaje;
+    }
+}
+
+// Crear la instancia
+const miMascota = new Mascota("Fido", "🐶");
+miMascota.actualizarUI("¡Hola! Soy " + miMascota.nombre + " 👋");
+
+</script>
+</body>

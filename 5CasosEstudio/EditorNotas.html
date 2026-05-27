@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Notas - Dinamodev</title>
+    <link rel="stylesheet" href="EditorNotas.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Mis Notas</h1>
+            <button id="themeToggle">🌓 Modo Oscuro</button>
+        </header>
+
+        <section class="controls">
+            <input type="text" id="searchBar" placeholder="Buscar en título o contenido...">
+            <select id="filterCategory">
+                <option value="">Todas las categorías</option>
+                <option value="Personal">Personal</option>
+                <option value="Trabajo">Trabajo</option>
+                <option value="Estudio">Estudio</option>
+            </select>
+            <button id="exportBtn">📥 Exportar JSON</button>
+        </section>
+
+        <form id="noteForm">
+            <input type="text" id="noteTitle" placeholder="Título" required>
+            <textarea id="noteContent" placeholder="Escribe tu nota aquí..." required></textarea>
+            <input type="text" id="noteCategory" placeholder="Categoría (ej: Trabajo)" required>
+            <button type="submit">Guardar Nota</button>
+        </form>
+
+        <div id="notesGrid" class="grid"></div>
+    </div>
+
+    <script src="EditorNotas.js"></script>
+</body>
+</html>

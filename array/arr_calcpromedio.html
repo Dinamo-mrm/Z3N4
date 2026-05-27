@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Notas Pro</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 400px; }
+        h2 { color: #2c3e50; text-align: center; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex-grow: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { cursor: pointer; padding: 8px 15px; border: none; border-radius: 4px; transition: 0.3s; }
+        .btn-add { background: #3498db; color: white; }
+        .btn-del { background: #e67e22; color: white; margin-top: 10px; width: 100%; }
+        
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
+        .stat-item { font-size: 0.9rem; color: #7f8c8d; }
+        .stat-value { font-weight: bold; color: #2c3e50; display: block; font-size: 1.1rem; }
+        
+        #stat-estado { font-weight: bold; text-align: center; display: block; margin-top: 15px; font-size: 1.2rem; }
+        
+        /* Contenedor de Barras */
+        #barras { margin-top: 20px; display: flex; align-items: flex-end; gap: 5px; height: 120px; border-bottom: 2px solid #34495e; padding-bottom: 5px; }
+        .barra-container { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .barra { width: 100%; transition: height 0.5s ease; border-radius: 3px 3px 0 0; }
+        .nota-label { font-size: 0.7rem; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📊 Calculadora de Notas</h2>
+    
+    <div class="input-group">
+        <input type="number" id="inp-nota" placeholder="Nota (0-10)" min="0" max="10" step="0.1">
+        <button class="btn-add" onclick="agregarNota()">Agregar</button>
+    </div>
+
+    <div id="barras">
+        </div>
+
+    <div class="stats">
+        <div class="stat-item">Promedio: <span class="stat-value" id="stat-prom">0</span></div>
+        <div class="stat-item">Máxima: <span class="stat-value" id="stat-max">0</span></div>
+        <div class="stat-item">Mínima: <span class="stat-value" id="stat-min">0</span></div>
+        <div class="stat-item">Total notas: <span class="stat-value" id="stat-total">0</span></div>
+    </div>
+
+    <div id="stat-estado">-</div>
+    <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem;" id="stat-fraccion">0 de 0 aprobadas</p>
+
+    <button class="btn-del" onclick="eliminarUltima()">↩ Eliminar última nota</button>
+</div>
+
+<script>
+    let notas = [];
+
+    function agregarNota() {
+        const input = document.getElementById("inp-nota");
+        const valor = parseFloat(input.value);
+
+        // Validar rango
+        if (isNaN(valor) || valor < 0 || valor > 10) {
+            alert("Por favor, ingresa una nota válida entre 0 y 10");
+            return;
+        }
+
+        notas.push(valor);
+        input.value = "";
+        input.focus();
+        
+        actualizarTodo();
+    }
+
+    function eliminarUltima() {
+        if (notas.length > 0) {
+            notas.pop();
+            actualizarTodo();
+        }
+    }
+
+    function actualizarTodo() {
+        calcularEstadisticas();
+        dibujarBarras();
+    }
+
+    function calcularEstadisticas() {
+        const elProm = document.getElementById("stat-prom");
+        const elMax = document.getElementById("stat-max");
+        const elMin = document.getElementById("stat-min");
+        const elTotal = document.getElementById("stat-total");
+        const elEstado = document.getElementById("stat-estado");
+        const elFraccion = document.getElementById("stat-fraccion");
+
+        if (notas.length === 0) {
+            elProm.innerText = "0";
+            elMax.innerText = "0";
+            elMin.innerText = "0";
+            elTotal.innerText = "0";
+            elEstado.innerText = "-";
+            elEstado.style.color = "#2c3e50";
+            elFraccion.innerText = "0 de 0 aprobadas";
+            return;
+        }
+
+        // 1. Cálculos base
+        let suma = 0;
+        let aprobados = 0;
+        let maximo = notas[0];
+        let minimo = notas[0];
+
+        for (let i = 0; i < notas.length; i++) {
+            suma += notas[i];
+            
+            // Contar aprobados
+            if (notas[i] >= 6) aprobados++;
+            
+            // Buscar max y min
+            if (notas[i] > maximo) maximo = notas[i];
+            if (notas[i] < minimo) minimo = notas[i];
+        }
+
+        const promedio = suma / notas.length;
+
+        // 2. Lógica del Mini-reto (Estado)
+        if (promedio >= 9.0) {
+            elEstado.innerText = "🏆 Excelente";
+            elEstado.style.color = "#D4AF37";
+        } else if (promedio >= 6.0) {
+            elEstado.innerText = "✅ Aprobado";
+            elEstado.style.color = "#27AE60";
+        } else {
+            elEstado.innerText = "❌ Reprobado";
+            elEstado.style.color = "#E74C3C";
+        }
+
+        // 3. Actualizar Interfaz
+        elProm.innerText = promedio.toFixed(1);
+        elMax.innerText = maximo;
+        elMin.innerText = minimo;
+        elTotal.innerText = notas.length;
+        elFraccion.innerText = `${aprobados} de ${notas.length} aprobadas`;
+    }
+
+    function dibujarBarras() {
+        const contenedor = document.getElementById("barras");
+        contenedor.innerHTML = "";
+
+        for (let i = 0; i < notas.length; i++) {
+            const porcentaje = (notas[i] / 10) * 100;
+            const color = notas[i] >= 6 ? "#27AE60" : "#E74C3C";
+            
+            contenedor.innerHTML += `
+                <div class="barra-container">
+                    <div class="barra" style="height: ${porcentaje}%; background-color: ${color};"></div>
+                    <span class="nota-label">${notas[i]}</span>
+                </div>
+            `;
+        }
+    }
+</script>
+
+</body>
+<script src="arr_calcpromedio.js"></script>
+</html>

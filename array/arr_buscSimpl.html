@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscador de Videojuegos</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f9; }
+        .contenedor { max-width: 400px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { width: 70%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 8px; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 4px; }
+        .resultado-item { padding: 8px; border-bottom: 1px solid #eee; }
+        .resaltado { background-color: yellow; font-weight: bold; }
+        #resultado-conteo { font-size: 0.9em; color: #666; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h2>🎮 Mis Videojuegos</h2>
+    
+    <input type="text" id="inp-buscar" oninput="buscar()" placeholder="Buscar juego...">
+    <button onclick="limpiar()">Limpiar</button>
+
+    <div id="resultado-conteo"></div>
+    <div id="resultado-lista"></div>
+</div>
+
+<script>
+    // 1. Dataset de 15 Videojuegos (Mini-reto)
+    const juegos = [
+        "⚔️ Elden Ring", "🏢 Idle Tycoon City", "🧬 ColonySim", "🐉 Dragon Age", 
+        "🌌 Mass Effect", "🏹 Horizon Zero Dawn", "🚜 Stardew Valley", "🏎️ Forza Horizon", 
+        "🧟 Project Zomboid", "⚔️ The Witcher 3", "👑 Crusader Kings III", "🏙️ Cities Skylines",
+        "🔫 Cyberpunk 2077", "🏰 Manor Lords", "🚀 Starfield"
+    ];
+
+    function buscar() {
+        const input = document.getElementById("inp-buscar");
+        const termino = input.value.toLowerCase();
+        let encontrados = [];
+
+        // 2. Filtrar con bucle for
+        for (let i = 0; i < juegos.length; i++) {
+            const juegoMini = juegos[i].toLowerCase();
+            if (juegoMini.includes(termino)) {
+                // Bonus avanzado: Resaltar el texto
+                if (termino !== "") {
+                    // Usamos RegExp para que reemplace sin importar mayúsculas/minúsculas en el texto original
+                    const regex = new RegExp(`(${termino})`, "gi");
+                    const textoResaltado = juegos[i].replace(regex, "<span class='resaltado'>$1</span>");
+                    encontrados.push(textoResaltado);
+                } else {
+                    encontrados.push(juegos[i]);
+                }
+            }
+        }
+
+        // 3. Actualizar contador
+        document.getElementById("resultado-conteo").innerHTML = `${encontrados.length} de ${juegos.length} juegos encontrados`;
+
+        // 4. Mostrar resultados
+        const lista = document.getElementById("resultado-lista");
+        lista.innerHTML = "";
+
+        if (encontrados.length === 0) {
+            lista.innerHTML = `<div class="resultado-item">No se encontró: <strong>${termino}</strong></div>`;
+            return;
+        }
+
+        for (let i = 0; i < encontrados.length; i++) {
+            lista.innerHTML += `<div class="resultado-item">${encontrados[i]}</div>`;
+        }
+    }
+
+    // Reto: Función para limpiar búsqueda
+    function limpiar() {
+        document.getElementById("inp-buscar").value = "";
+        buscar(); // Volvemos a ejecutar para mostrar la lista completa
+    }
+
+    // Inicializar al cargar
+    buscar();
+</script>
+ <script src="arr_buscSimpl.js"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>03 - Contador de Elementos</title>
+  <style>
+    body { 
+      font-family: sans-serif; 
+      max-width: 600px; 
+      margin: 40px auto; 
+      padding: 20px; 
+      background-color: #fdf2f2;
+    }
+    
+    .panel-contenedor {
+      display: flex; 
+      gap: 12px; 
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      flex: 1; 
+      color: white; 
+      padding: 20px; 
+      border-radius: 12px; 
+      text-align: center;
+      transition: background 0.3s ease; /* Para que el cambio de color sea suave */
+    }
+
+    .numero-grande {
+      font-size: 36px; 
+      font-weight: bold;
+    }
+
+    .etiqueta {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    input {
+      width: 60%; 
+      padding: 10px; 
+      font-size: 16px; 
+      border: 2px solid #ccc; 
+      border-radius: 8px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 18px; 
+      background: #C0392B; 
+      color: white; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 16px; 
+      cursor: pointer;
+    }
+
+    button:hover { background: #A93226; }
+
+    ul { list-style: none; padding: 0; margin-top: 20px; }
+
+    li { 
+      background: white; 
+      border-left: 4px solid #C0392B; 
+      padding: 10px 16px; 
+      margin-bottom: 8px; 
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    #aviso-lleno {
+      color: #E74C3C;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 15px;
+      display: none; /* Oculto por defecto */
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔢 Gestión de Invitados</h2> 
+
+  <div class="panel-contenedor">
+    
+    <div id="panel-total" class="panel" style="background:#C0392B;"> 
+      <div id="num-total" class="numero-grande">0</div> 
+      <div class="etiqueta">Total invitados</div> 
+    </div> 
+
+    <div id="panel-libres" class="panel" style="background:#922B21;"> 
+      <div id="quedan" class="numero-grande">10</div> 
+      <div class="etiqueta">Lugares libres</div> 
+    </div> 
+
+    <div id="panel-porcentaje" class="panel" style="background:#D35400;"> 
+      <div id="num-porcentaje" class="numero-grande">0%</div> 
+      <div class="etiqueta">Ocupación</div> 
+    </div>
+
+  </div> 
+
+  <div id="aviso-lleno">⚠ ¡Casi lleno! (Más de 8)</div>
+
+  <div style="text-align: center;">
+    <input id="inp-nombre" type="text" placeholder="Nombre del invitado"> 
+    <button onclick="agregarInvitado()">+ Invitar</button> 
+  </div>
+
+  <ul id="lista-invitados"></ul> 
+
+  <script>
+    const LIMITE_MAXIMO = 10;
+    let invitados = []; 
+ 
+    function agregarInvitado() { 
+      const input = document.getElementById("inp-nombre");
+      const nombre = input.value.trim(); 
+ 
+      if (nombre === "") { 
+        alert("Escribe un nombre"); 
+        return; 
+      } 
+ 
+      // 1. Verificar si ya alcanzamos el límite usando .length 
+      if (invitados.length >= LIMITE_MAXIMO) { 
+        alert("¡Lista llena! No hay más lugares."); 
+        return; 
+      } 
+ 
+      // 2. Agregar al array 
+      invitados.push(nombre); 
+ 
+      // 3. Limpiar input 
+      input.value = ""; 
+      input.focus();
+ 
+      // 4. Actualizar todo 
+      actualizarContadores(); 
+      dibujarLista(); 
+    } 
+ 
+    function actualizarContadores() { 
+      // 5. Cálculos
+      const total = invitados.length; 
+      const libres = LIMITE_MAXIMO - total; 
+      const porcentaje = (total / LIMITE_MAXIMO * 100).toFixed(0);
+ 
+      // 6. Actualizar textos en pantalla
+      document.getElementById("num-total").innerHTML = total; 
+      document.getElementById("quedan").innerHTML = libres; 
+      document.getElementById("num-porcentaje").innerHTML = porcentaje + "%";
+
+      // --- RETOS ---
+
+      // A. Cambiar color de "Lugares libres" si quedan 3 o menos
+      const panelLibres = document.getElementById("panel-libres");
+      if (libres <= 3) {
+        panelLibres.style.background = "#E74C3C"; // Rojo más brillante
+      } else {
+        panelLibres.style.background = "#922B21"; // Color original
+      }
+
+      // B. Bonus: Aviso si supera 8 elementos
+      const aviso = document.getElementById("aviso-lleno");
+      if (total > 8) {
+        aviso.style.display = "block";
+      } else {
+        aviso.style.display = "none";
+      }
+    } 
+ 
+    function dibujarLista() { 
+      const lista = document.getElementById("lista-invitados"); 
+      lista.innerHTML = ""; 
+ 
+      for (let i = 0; i < invitados.length; i++) { 
+        // 7. Mostramos número de posición + nombre 
+        lista.innerHTML += "<li>" + (i+1) + ". " + invitados[i] + "</li>"; 
+      } 
+    }
+  </script>
+</body>
+<script src="arr_listdina.js"></script>
+</html>

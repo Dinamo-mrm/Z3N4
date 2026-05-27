@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Inventario - Desarrollo Modular</title>
+  <style>
+    .stock-bajo { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+    .barra-stock { height: 10px; background: #22c55e; transition: width 0.3s ease; }
+    .barra-bajo { background: #ef4444; }
+  </style>
+</head>
+<body class="bg-gray-50 p-4 md:p-10">
+
+  <div class="max-w-6xl mx-auto space-y-8">
+    <header class="flex justify-between items-center border-b pb-4">
+      <h1 class="text-3xl font-black text-slate-800">📦 Gestor de Inventario</h1>
+      <span id="resumen" class="bg-slate-800 text-white px-4 py-1 rounded-full text-sm">0 Productos</span>
+    </header>
+
+    <section class="bg-white p-6 rounded-xl shadow-sm border">
+      <h2 class="font-bold mb-4 text-lg">Registrar Nuevo Producto</h2>
+      <form id="formProducto" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <input type="text" name="nombre" id="nombre" placeholder="Nombre" class="border p-2 rounded" required>
+        <input type="text" name="categoria" id="categoria" placeholder="Categoría" class="border p-2 rounded" required>
+        <input type="number" name="precio" id="precio" placeholder="Precio" class="border p-2 rounded" min="0" required>
+        <input type="number" name="stock" id="stock" placeholder="Stock" class="border p-2 rounded" min="0" required>
+        <button type="submit" class="bg-emerald-600 text-white font-bold rounded hover:bg-emerald-700 transition">Agregar</button>
+      </form>
+    </section>
+
+    <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2 space-y-4">
+        <div class="flex justify-between items-center">
+          <h2 class="font-bold text-xl">Existencias</h2>
+          <select id="filtroCategoria" class="border p-2 rounded text-sm">
+            <option value="">Todas las categorías</option>
+          </select>
+        </div>
+        <div class="overflow-x-auto bg-white rounded-xl shadow-sm border">
+          <table class="w-full text-left">
+            <thead class="bg-gray-100 border-b">
+              <tr>
+                <th class="p-4">Producto</th>
+                <th class="p-4">Categoría</th>
+                <th class="p-4">Stock</th>
+                <th class="p-4">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaInventario"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="bg-white p-6 rounded-xl shadow-sm border h-fit">
+        <h2 class="font-bold mb-4">Nivel de Stock</h2>
+        <div id="graficoBarras" class="space-y-4"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="GestordeInventario.js"></script>
+</body>
+</html>

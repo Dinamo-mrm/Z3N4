@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tienda DinamoDev - Componentes POO</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; margin: 0; padding: 20px; color: #1e293b; }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    
+    /* Buscador y Orden */
+    .barra-herramientas { display: flex; gap: 10px; margin: 15px 0; }
+    input[type="text"], select { flex: 1; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; }
+    
+    /* Chips de Categoría */
+    .filtros { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+    .chip { padding: 8px 16px; background: #e2e8f0; border-radius: 20px; cursor: pointer; font-size: 14px; transition: 0.2s; border: none; }
+    .chip.activo { background: #3b82f6; color: white; }
+    
+    /* Grid de Productos */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    .card { background: white; padding: 20px; border-radius: 16px; text-align: center; position: relative; transition: 0.3s; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    .card:hover { transform: translateY(-5px); }
+    .card .emoji { font-size: 50px; margin-bottom: 10px; }
+    .card .precio { font-weight: bold; color: #3b82f6; font-size: 20px; }
+    .card .cat-tag { font-size: 11px; text-transform: uppercase; color: #64748b; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; }
+    
+    /* Favoritos */
+    .btn-fav { position: absolute; top: 15px; right: 15px; border: none; background: none; cursor: pointer; font-size: 20px; filter: grayscale(1); transition: 0.2s; }
+    .btn-fav.es-fav { filter: grayscale(0); transform: scale(1.2); }
+    
+    .stats-bar { padding: 10px; font-size: 13px; color: #64748b; text-align: center; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h2>🏪 Tienda Online Pro</h2>
+    <div class="barra-herramientas">
+      <input type="text" id="busqueda" placeholder="🔍 Buscar productos..." oninput="tienda.filtrar()">
+      <select id="orden" onchange="tienda.filtrar()">
+        <option value="nombre">Nombre A-Z</option>
+        <option value="precio-asc">Precio: Menor a Mayor</option>
+        <option value="precio-desc">Precio: Mayor a Menor</option>
+      </select>
+      <button id="btn-ver-favs" class="chip" onclick="tienda.toggleSoloFavs()">Ver Favoritos ❤️</button>
+    </div>
+    <div id="filtros" class="filtros"></div>
+    <div id="stats-bar" class="stats-bar"></div>
+  </header>
+
+  <div id="grid-productos" class="grid"></div>
+  <p style="text-align:center; color:#94a3b8; margin-top:20px;">Vistos: <span id="contador-vistos">0</span></p>
+</div>
+
+<script>
+class Producto {
+    constructor(nombre, precio, categoria, emoji) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.categoria = categoria;
+        this.emoji = emoji;
+        this.favorito = false; // Mini-reto: Favorito
+    }
+}
+
+class Tienda {
+    constructor(productos) {
+        this.productos = productos;
+        this.categoriaActiva = "Todos";
+        this.soloFavs = false;
+        this.vistos = 0; // Bonus: Contador de vistos
+        
+        this.construirFiltros();
+        this.filtrar();
+    }
+
+    obtenerCategorias() {
+        const cats = ["Todos", ...new Set(this.productos.map(p => p.categoria))];
+        return cats;
+    }
+
+    construirFiltros() {
+        const cont = document.getElementById("filtros");
+        cont.innerHTML = this.obtenerCategorias().map(cat => `
+            <button class="chip ${cat === this.categoriaActiva ? 'activo' : ''}" 
+                    onclick="tienda.setCategoria('${cat}')">${cat}</button>
+        `).join("");
+    }
+
+    setCategoria(cat) {
+        this.categoriaActiva = cat;
+        this.construirFiltros();
+        this.filtrar();
+    }
+
+    toggleSoloFavs() {
+        this.soloFavs = !this.soloFavs;
+        document.getElementById("btn-ver-favs").classList.toggle("activo", this.soloFavs);
+        this.filtrar();
+    }
+
+    sumarVisto() {
+        this.vistos++;
+        document.getElementById("contador-vistos").innerText = this.vistos;
+    }
+
+    toggleFavorito(nombre) {
+        const p = this.productos.find(prod => prod.nombre === nombre);
+        if (p) p.favorito = !p.favorito;
+        this.filtrar();
+    }
+
+    filtrar() {
+        const busq = document.getElementById("busqueda").value.toLowerCase();
+        const orden = document.getElementById("orden").value;
+
+        // 1. Filtrado
+        let resultado = this.productos.filter(p => {
+            const coincideCat = this.categoriaActiva === "Todos" || p.categoria === this.categoriaActiva;
+            const coincideBusq = p.nombre.toLowerCase().includes(busq);
+            const coincideFav = this.soloFavs ? p.favorito : true;
+            return coincideCat && coincideBusq && coincideFav;
+        });
+
+        // 2. Ordenamiento (Mini-reto)
+        if (orden === "nombre") {
+            resultado.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        } else if (orden === "precio-asc") {
+            resultado.sort((a, b) => a.precio - b.precio);
+        } else if (orden === "precio-desc") {
+            resultado.sort((a, b) => b.precio - a.precio);
+        }
+
+        this.renderGrid(resultado);
+    }
+
+    renderGrid(lista) {
+        const grid = document.getElementById("grid-productos");
+        grid.innerHTML = "";
+        
+        // Estadísticas
+        const total = lista.reduce((sum, p) => sum + p.precio, 0);
+        const prom = lista.length ? (total / lista.length).toFixed(2) : 0;
+        document.getElementById("stats-bar").innerText = `${lista.length} productos | Promedio: $${prom}`;
+
+        lista.forEach(p => {
+            grid.innerHTML += `
+                <div class="card" onmouseover="tienda.sumarVisto()">
+                    <button class="btn-fav ${p.favorito ? 'es-fav' : ''}" 
+                            onclick="tienda.toggleFavorito('${p.nombre}')">❤️</button>
+                    <div class="emoji">${p.emoji}</div>
+                    <div class="nombre">${p.nombre}</div>
+                    <div class="precio">$${p.precio.toFixed(2)}</div>
+                    <div class="cat-tag">${p.categoria}</div>
+                </div>
+            `;
+        });
+    }
+}
+
+// Datos iniciales
+const tienda = new Tienda([
+    new Producto("Auriculares", 59.99, "Electrónica", "🎧"),
+    new Producto("Teclado RGB", 89.99, "Electrónica", "⌨"),
+    new Producto("Mochila", 34.50, "Accesorios", "🎒"),
+    new Producto("Gorra", 19.90, "Accesorios", "🧢"),
+    new Producto("Lámpara LED", 27.00, "Hogar", "💡"),
+    new Producto("Planta Suculenta", 8.99, "Hogar", "🌵"),
+    new Producto("Cuaderno A5", 12.50, "Papelería", "📓"),
+    new Producto("Bolígrafos x10", 6.80, "Papelería", "✒"),
+]);
+</script>
+</body>
+</html>
