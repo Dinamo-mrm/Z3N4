@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+  <h2>💳 Calculadora de Precios con IVA</h2> 
+ 
+  <label>Precio base ($):</label><br> 
+  <input id="inp-precio" type="number" 
+         placeholder="Ej: 50000" min="0"> 
+ 
+  <br><br> 
+  <button onclick="calcularConIVA()">Calcular con IVA 19%</button> 
+  <button onclick="calcularConDescuento()">Calcular con Descuento 10% + IVA</button>
+ 
+  <div id="desglose"></div> 
+ 
+  <style> 
+    body   { font-family: sans-serif; padding: 40px; max-width: 480px; margin: auto; } 
+    input  { padding: 12px; font-size: 18px; width: 220px; 
+             border: 2px solid #ccc; border-radius: 10px; } 
+    button { padding: 12px 24px; font-size: 18px; margin-top: 8px; 
+             background: #4338CA; color: white; border: none; 
+             border-radius: 10px; cursor: pointer; display: block; } 
+    .linea { display: flex; justify-content: space-between; 
+             padding: 10px; border-bottom: 1px solid #E5E7EB; font-size: 18px; } 
+    .total { font-weight: bold; font-size: 22px; color: #4338CA; } 
+  </style> 
+  <script src="multiplicador.js"></script>
+</body> 

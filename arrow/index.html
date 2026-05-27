@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SocioTask — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+
+    <div class="sidebar__brand">
+      <div class="sidebar__brand-icon">ST</div>
+      <span class="sidebar__brand-name">SocioTask</span>
+    </div>
+
+    <span class="sidebar__section-label">Principal</span>
+
+    <nav class="sidebar__nav">
+      <div class="sidebar__nav-group">
+        <a href="#" class="sidebar__link sidebar__link--active">
+          <span class="sidebar__link-icon">📋</span>
+          Tareas
+          <span class="sidebar__badge">8</span>
+        </a>
+        <a href="#" class="sidebar__link">
+          <span class="sidebar__link-icon">📊</span>
+          Estadísticas
+        </a>
+        <a href="#" class="sidebar__link">
+          <span class="sidebar__link-icon">👥</span>
+          Equipo
+        </a>
+        <a href="#" class="sidebar__link">
+          <span class="sidebar__link-icon">📅</span>
+          Calendario
+        </a>
+      </div>
+    </nav>
+
+    <span class="sidebar__section-label">Configuración</span>
+    <a href="#" class="sidebar__link">
+      <span class="sidebar__link-icon">⚙️</span>
+      Ajustes
+    </a>
+
+    <button class="sidebar__theme-btn" id="theme-toggle">
+      <span class="sidebar__link-icon" id="theme-icon">☀️</span>
+      <span id="theme-label">Modo claro</span>
+    </button>
+
+    <div class="sidebar__footer">
+      <div class="sidebar__user">
+        <div class="sidebar__avatar">AL</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name">Ana López</div>
+          <div class="sidebar__user-role">Full-Stack Dev</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <div class="header__title-block">
+      <h1>Mi Dashboard</h1>
+      <p id="current-date">Cargando fecha...</p>
+    </div>
+    <div class="header__actions">
+      <div class="header__search">
+        <span class="header__search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Buscar tareas...">
+      </div>
+      <button class="header__icon-btn" title="Notificaciones">🔔</button>
+      <button class="header__icon-btn" title="Ayuda">❓</button>
+    </div>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <!-- Estadísticas -->
+    <section class="stats" aria-label="Estadísticas rápidas">
+
+      <article class="stats__card">
+        <div class="stats__card-header">
+          <span class="stats__label">Total Tareas</span>
+          <div class="stats__icon stats__icon--blue">📋</div>
+        </div>
+        <div class="stats__value">24</div>
+        <div class="stats__sub">Progreso general <span>75%</span></div>
+        <div class="stats__progress-bar">
+          <div class="stats__progress-fill stats__progress-fill--blue" style="width: 75%"></div>
+        </div>
+      </article>
+
+      <article class="stats__card">
+        <div class="stats__card-header">
+          <span class="stats__label">Completadas</span>
+          <div class="stats__icon stats__icon--green">✅</div>
+        </div>
+        <div class="stats__value stats__value--green">18</div>
+        <div class="stats__sub">Del total <span>75%</span></div>
+        <div class="stats__progress-bar">
+          <div class="stats__progress-fill stats__progress-fill--green" style="width: 75%"></div>
+        </div>
+      </article>
+
+      <article class="stats__card">
+        <div class="stats__card-header">
+          <span class="stats__label">En Progreso</span>
+          <div class="stats__icon stats__icon--yellow">⏳</div>
+        </div>
+        <div class="stats__value stats__value--yellow">4</div>
+        <div class="stats__sub">Del total <span>17%</span></div>
+        <div class="stats__progress-bar">
+          <div class="stats__progress-fill stats__progress-fill--yellow" style="width: 17%"></div>
+        </div>
+      </article>
+
+      <article class="stats__card">
+        <div class="stats__card-header">
+          <span class="stats__label">Vencidas</span>
+          <div class="stats__icon stats__icon--red">🚨</div>
+        </div>
+        <div class="stats__value stats__value--red">2</div>
+        <div class="stats__sub">Del total <span>8%</span></div>
+        <div class="stats__progress-bar">
+          <div class="stats__progress-fill stats__progress-fill--red" style="width: 8%"></div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Tarjetas de Tareas -->
+    <section class="tasks" aria-label="Tarjetas de tareas">
+
+      <div class="tasks__header">
+        <h2 class="tasks__title">📄 Tarjetas de Tareas</h2>
+        <div class="tasks__filters" role="group" aria-label="Filtros de prioridad">
+          <button class="tasks__filter-btn tasks__filter-btn--active" data-filter="todas">Todas</button>
+          <button class="tasks__filter-btn" data-filter="alta">Alta</button>
+          <button class="tasks__filter-btn" data-filter="media">Media</button>
+          <button class="tasks__filter-btn" data-filter="baja">Baja</button>
+        </div>
+        <button class="tasks__new-btn" id="new-task-btn" aria-label="Crear nueva tarea">
+          + Nueva Tarea
+        </button>
+      </div>
+
+      <div class="tasks__list" id="tasks-list">
+
+        <!-- TAREA 001 — Alta -->
+        <article class="task-card task-card--priority-alta" data-task-id="001" data-priority="alta" data-status="pendiente">
+          <div class="task-card__checkbox" role="checkbox" aria-checked="false" aria-label="Marcar como completada" tabindex="0"></div>
+          <div class="task-card__body">
+            <div class="task-card__header">
+              <h3 class="task-card__title">Diseñar arquitectura de base de datos para módulo de pagos</h3>
+              <span class="task-card__badge task-card__badge--alta">● Alta</span>
+            </div>
+            <p class="task-card__desc">Definir esquema de tablas, relaciones y stored procedures necesarios para integrar la pasarela de pago con el sistema actual de facturación.</p>
+            <div class="task-card__meta">
+              <span class="task-card__meta-item task-card__meta-item--deadline">📅 Vence: 06 mar 2026</span>
+              <span class="task-card__meta-item">👤 Ana López</span>
+              <span class="task-card__tag task-card__tag--backend">backend</span>
+              <span class="task-card__tag task-card__tag--bd">BD</span>
+            </div>
+          </div>
+          <div class="task-card__actions">
+            <button class="task-card__btn task-card__btn--completar" data-id="001" data-tooltip="Marcar como completada" aria-label="Completar tarea">✔</button>
+            <button class="task-card__btn task-card__btn--editar"    data-id="001" data-tooltip="Editar tarea"            aria-label="Editar tarea">✏</button>
+            <button class="task-card__btn task-card__btn--eliminar"  data-id="001" data-tooltip="Eliminar tarea"          aria-label="Eliminar tarea">🗑</button>
+          </div>
+        </article>
+
+        <!-- TAREA 002 — Media -->
+        <article class="task-card task-card--priority-media" data-task-id="002" data-priority="media" data-status="pendiente">
+          <div class="task-card__checkbox" role="checkbox" aria-checked="false" aria-label="Marcar como completada" tabindex="0"></div>
+          <div class="task-card__body">
+            <div class="task-card__header">
+              <h3 class="task-card__title">Implementar autenticación con OAuth 2.0</h3>
+              <span class="task-card__badge task-card__badge--media">● Media</span>
+            </div>
+            <p class="task-card__desc">Integrar Google y GitHub como proveedores de OAuth para el sistema de login. Incluir manejo de tokens JWT y refresh tokens.</p>
+            <div class="task-card__meta">
+              <span class="task-card__meta-item">📅 Vence: 12 mar 2026</span>
+              <span class="task-card__meta-item">👤 Carlos Ruiz</span>
+              <span class="task-card__tag task-card__tag--auth">auth</span>
+              <span class="task-card__tag task-card__tag--api">API</span>
+            </div>
+          </div>
+          <div class="task-card__actions">
+            <button class="task-card__btn task-card__btn--completar" data-id="002" data-tooltip="Marcar como completada" aria-label="Completar tarea">✔</button>
+            <button class="task-card__btn task-card__btn--editar"    data-id="002" data-tooltip="Editar tarea"            aria-label="Editar tarea">✏</button>
+            <button class="task-card__btn task-card__btn--eliminar"  data-id="002" data-tooltip="Eliminar tarea"          aria-label="Eliminar tarea">🗑</button>
+          </div>
+        </article>
+
+        <!-- TAREA 003 — Baja (Completada) -->
+        <article class="task-card task-card--priority-baja task-card--completed" data-task-id="003" data-priority="baja" data-status="completada">
+          <div class="task-card__checkbox task-card__checkbox--checked" role="checkbox" aria-checked="true" aria-label="Tarea completada" tabindex="0"></div>
+          <div class="task-card__body">
+            <div class="task-card__header">
+              <h3 class="task-card__title">Configurar ESLint y Prettier en el monorepo</h3>
+              <span class="task-card__badge task-card__badge--baja">● Baja</span>
+            </div>
+            <p class="task-card__desc">Unificar reglas de linting y formato en todos los paquetes del workspace de Turborepo.</p>
+            <div class="task-card__meta">
+              <span class="task-card__meta-item">✅ Completada: 02 mar 2026</span>
+              <span class="task-card__tag task-card__tag--devops">devops</span>
+              <span class="task-card__tag task-card__tag--dx">DX</span>
+            </div>
+          </div>
+          <div class="task-card__actions">
+            <button class="task-card__btn task-card__btn--completar" data-id="003" data-tooltip="Marcar como completada" aria-label="Completar tarea">✔</button>
+            <button class="task-card__btn task-card__btn--editar"    data-id="003" data-tooltip="Editar tarea"            aria-label="Editar tarea">✏</button>
+            <button class="task-card__btn task-card__btn--eliminar"  data-id="003" data-tooltip="Eliminar tarea"          aria-label="Eliminar tarea">🗑</button>
+          </div>
+        </article>
+
+        <!-- TAREA 004 — Alta -->
+        <article class="task-card task-card--priority-alta" data-task-id="004" data-priority="alta" data-status="pendiente">
+          <div class="task-card__checkbox" role="checkbox" aria-checked="false" aria-label="Marcar como completada" tabindex="0"></div>
+          <div class="task-card__body">
+            <div class="task-card__header">
+              <h3 class="task-card__title">Corregir vulnerabilidad XSS en formulario de comentarios</h3>
+              <span class="task-card__badge task-card__badge--alta">● Alta</span>
+            </div>
+            <p class="task-card__desc">El input del formulario no sanitiza el HTML de entrada. Implementar DOMPurify y validación server-side. Reportado por el equipo de seguridad.</p>
+            <div class="task-card__meta">
+              <span class="task-card__meta-item task-card__meta-item--deadline">📅 Vence: 07 mar 2026</span>
+              <span class="task-card__meta-item">👤 Ana López</span>
+              <span class="task-card__tag task-card__tag--backend">backend</span>
+              <span class="task-card__tag task-card__tag--auth">seguridad</span>
+            </div>
+          </div>
+          <div class="task-card__actions">
+            <button class="task-card__btn task-card__btn--completar" data-id="004" data-tooltip="Marcar como completada" aria-label="Completar tarea">✔</button>
+            <button class="task-card__btn task-card__btn--editar"    data-id="004" data-tooltip="Editar tarea"            aria-label="Editar tarea">✏</button>
+            <button class="task-card__btn task-card__btn--eliminar"  data-id="004" data-tooltip="Eliminar tarea"          aria-label="Eliminar tarea">🗑</button>
+          </div>
+        </article>
+
+        <!-- TAREA 005 — Media -->
+        <article class="task-card task-card--priority-media" data-task-id="005" data-priority="media" data-status="en_progreso">
+          <div class="task-card__checkbox" role="checkbox" aria-checked="false" aria-label="Marcar como completada" tabindex="0"></div>
+          <div class="task-card__body">
+            <div class="task-card__header">
+              <h3 class="task-card__title">Optimizar queries N+1 en el endpoint de proyectos</h3>
+              <span class="task-card__badge task-card__badge--media">● Media</span>
+            </div>
+            <p class="task-card__desc">Usar eager loading con Prisma para reducir el número de queries al cargar la lista de proyectos con sus miembros y tareas asociadas.</p>
+            <div class="task-card__meta">
+              <span class="task-card__meta-item">📅 Vence: 18 mar 2026</span>
+              <span class="task-card__meta-item">👤 Diego Mora</span>
+              <span class="task-card__tag task-card__tag--backend">backend</span>
+              <span class="task-card__tag task-card__tag--bd">BD</span>
+            </div>
+          </div>
+          <div class="task-card__actions">
+            <button class="task-card__btn task-card__btn--completar" data-id="005" data-tooltip="Marcar como completada" aria-label="Completar tarea">✔</button>
+            <button class="task-card__btn task-card__btn--editar"    data-id="005" data-tooltip="Editar tarea"            aria-label="Editar tarea">✏</button>
+            <button class="task-card__btn task-card__btn--eliminar"  data-id="005" data-tooltip="Eliminar tarea"          aria-label="Eliminar tarea">🗑</button>
+          </div>
+        </article>
+
+        <div class="tasks__empty" id="tasks-empty" role="status">
+          <div class="tasks__empty-icon">📭</div>
+          <p>No hay tareas con ese filtro.</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main><!-- /main -->
+</div><!-- /dashboard -->
+
+<!-- ============ MODAL — Nueva Tarea ============ -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <h2 class="modal__title" id="modal-title">+ Nueva Tarea</h2>
+
+    <div class="modal__field">
+      <label class="modal__label" for="task-titulo">Título *</label>
+      <input class="modal__input" id="task-titulo" type="text" placeholder="Nombre corto de la tarea">
+    </div>
+
+    <div class="modal__field">
+      <label class="modal__label" for="task-desc">Descripción</label>
+      <textarea class="modal__textarea" id="task-desc" placeholder="Detalle ampliado..."></textarea>
+    </div>
+
+    <div class="modal__row">
+      <div class="modal__field">
+        <label class="modal__label" for="task-prioridad">Prioridad *</label>
+        <select class="modal__select" id="task-prioridad">
+          <option value="alta">Alta</option>
+          <option value="media" selected>Media</option>
+          <option value="baja">Baja</option>
+        </select>
+      </div>
+      <div class="modal__field">
+        <label class="modal__label" for="task-fecha">Fecha límite</label>
+        <input class="modal__input" id="task-fecha" type="date">
+      </div>
+    </div>
+
+    <div class="modal__row">
+      <div class="modal__field">
+        <label class="modal__label" for="task-asignado">Asignado a</label>
+        <select class="modal__select" id="task-asignado">
+          <option>Ana López</option>
+          <option>Carlos Ruiz</option>
+          <option>Diego Mora</option>
+        </select>
+      </div>
+      <div class="modal__field">
+        <label class="modal__label" for="task-etiqueta">Etiqueta</label>
+        <input class="modal__input" id="task-etiqueta" type="text" placeholder="backend, auth...">
+      </div>
+    </div>
+
+    <div class="modal__actions">
+      <button class="modal__cancel-btn" id="modal-cancel">Cancelar</button>
+      <button class="modal__submit-btn" id="modal-submit">Crear Tarea</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ============================================================
+     FECHA ACTUAL
+  ============================================================ */
+  const dateEl = document.getElementById('current-date');
+  const now = new Date();
+  dateEl.textContent = now.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  /* ============================================================
+     MODO OSCURO / CLARO
+  ============================================================ */
+  const themeToggle  = document.getElementById('theme-toggle');
+  const themeIcon    = document.getElementById('theme-icon');
+  const themeLabel   = document.getElementById('theme-label');
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (theme === 'dark') {
+      themeIcon.textContent  = '☀️';
+      themeLabel.textContent = 'Modo claro';
+    } else {
+      themeIcon.textContent  = '🌙';
+      themeLabel.textContent = 'Modo oscuro';
+    }
+  }
+
+  // Iniciar en oscuro (como la referencia)
+  applyTheme('dark');
+
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ============================================================
+     FILTROS DE PRIORIDAD
+  ============================================================ */
+  const filterBtns = document.querySelectorAll('.tasks__filter-btn');
+  const taskCards  = document.querySelectorAll('.task-card');
+  const emptyMsg   = document.getElementById('tasks-empty');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('tasks__filter-btn--active'));
+      btn.classList.add('tasks__filter-btn--active');
+      const filter = btn.dataset.filter;
+      let visible = 0;
+      taskCards.forEach(card => {
+        const match = filter === 'todas' || card.dataset.priority === filter;
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+    });
+  });
+
+  /* ============================================================
+     BÚSQUEDA
+  ============================================================ */
+  document.getElementById('search-input').addEventListener('input', function () {
+    const q = this.value.toLowerCase().trim();
+    let visible = 0;
+    taskCards.forEach(card => {
+      const title = card.querySelector('.task-card__title').textContent.toLowerCase();
+      const desc  = card.querySelector('.task-card__desc').textContent.toLowerCase();
+      const match = !q || title.includes(q) || desc.includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+  });
+
+  /* ============================================================
+     CHECKBOX — Completar tarjeta
+  ============================================================ */
+  document.getElementById('tasks-list').addEventListener('click', e => {
+    const checkbox = e.target.closest('.task-card__checkbox');
+    if (checkbox) {
+      const card = checkbox.closest('.task-card');
+      const checked = checkbox.getAttribute('aria-checked') === 'true';
+      checkbox.setAttribute('aria-checked', String(!checked));
+      checkbox.classList.toggle('task-card__checkbox--checked', !checked);
+      card.classList.toggle('task-card--completed', !checked);
+    }
+
+    // Botón completar
+    if (e.target.closest('.task-card__btn--completar')) {
+      const card = e.target.closest('.task-card');
+      const cb   = card.querySelector('.task-card__checkbox');
+      const checked = cb.getAttribute('aria-checked') === 'true';
+      cb.setAttribute('aria-checked', String(!checked));
+      cb.classList.toggle('task-card__checkbox--checked', !checked);
+      card.classList.toggle('task-card--completed', !checked);
+    }
+
+    // Botón eliminar
+    if (e.target.closest('.task-card__btn--eliminar')) {
+      const card = e.target.closest('.task-card');
+      card.style.transition = 'opacity 0.2s, transform 0.2s';
+      card.style.opacity = '0';
+      card.style.transform = 'translateX(20px)';
+      setTimeout(() => card.remove(), 200);
+    }
+  });
+
+  /* ============================================================
+     MODAL — Nueva Tarea
+  ============================================================ */
+  const modalOverlay = document.getElementById('modal-overlay');
+  const newTaskBtn   = document.getElementById('new-task-btn');
+  const modalCancel  = document.getElementById('modal-cancel');
+  const modalSubmit  = document.getElementById('modal-submit');
+
+  newTaskBtn.addEventListener('click', () => modalOverlay.classList.add('modal-overlay--open'));
+  modalCancel.addEventListener('click', () => modalOverlay.classList.remove('modal-overlay--open'));
+  modalOverlay.addEventListener('click', e => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('modal-overlay--open');
+  });
+
+  let taskCounter = 6;
+  modalSubmit.addEventListener('click', () => {
+    const titulo     = document.getElementById('task-titulo').value.trim();
+    const desc       = document.getElementById('task-desc').value.trim();
+    const prioridad  = document.getElementById('task-prioridad').value;
+    const fecha      = document.getElementById('task-fecha').value;
+    const asignado   = document.getElementById('task-asignado').value;
+    const etiqueta   = document.getElementById('task-etiqueta').value.trim();
+    if (!titulo) { document.getElementById('task-titulo').focus(); return; }
+
+    const id = String(taskCounter++).padStart(3, '0');
+    const fechaStr = fecha ? new Date(fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+
+    const article = document.createElement('article');
+    article.className = `task-card task-card--priority-${prioridad}`;
+    article.dataset.taskId  = id;
+    article.dataset.priority = prioridad;
+    article.dataset.status   = 'pendiente';
+    article.style.opacity    = '0';
+    article.style.transform  = 'translateY(10px)';
+
+    article.innerHTML = `
+      <div class="task-card__checkbox" role="checkbox" aria-checked="false" aria-label="Marcar como completada" tabindex="0"></div>
+      <div class="task-card__body">
+        <div class="task-card__header">
+          <h3 class="task-card__title">${titulo}</h3>
+          <span class="task-card__badge task-card__badge--${prioridad}">● ${prioridad.charAt(0).toUpperCase()+prioridad.slice(1)}</span>
+        </div>
+        ${desc ? `<p class="task-card__desc">${desc}</p>` : ''}
+        <div class="task-card__meta">
+          ${fechaStr ? `<span class="task-card__meta-item">📅 Vence: ${fechaStr}</span>` : ''}
+          <span class="task-card__meta-item">👤 ${asignado}</span>
+          ${etiqueta ? `<span class="task-card__tag">${etiqueta}</span>` : ''}
+        </div>
+      </div>
+      <div class="task-card__actions">
+        <button class="task-card__btn task-card__btn--completar" data-id="${id}" data-tooltip="Marcar como completada" aria-label="Completar tarea">✔</button>
+        <button class="task-card__btn task-card__btn--editar"    data-id="${id}" data-tooltip="Editar tarea"            aria-label="Editar tarea">✏</button>
+        <button class="task-card__btn task-card__btn--eliminar"  data-id="${id}" data-tooltip="Eliminar tarea"          aria-label="Eliminar tarea">🗑</button>
+      </div>`;
+
+    const list = document.getElementById('tasks-list');
+    list.insertBefore(article, list.firstChild);
+    requestAnimationFrame(() => {
+      article.style.transition = 'opacity 0.3s, transform 0.3s';
+      article.style.opacity = '1';
+      article.style.transform = 'none';
+    });
+
+    // Reset modal
+    ['task-titulo','task-desc','task-fecha','task-etiqueta'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('task-prioridad').value = 'media';
+    modalOverlay.classList.remove('modal-overlay--open');
+  });
+</script>
+</body>
+</html>

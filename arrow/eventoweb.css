@@ -1,0 +1,1433 @@
+/* ==========================================
+   STYLES.CSS - HOJA DE ESTILOS CSS
+   
+   CSS = Cascading Style Sheets (Hojas de Estilo en Cascada)
+   
+   FUNCIÓN: Controlar la PRESENTACIÓN VISUAL del HTML
+   - Colores, tamaños, posiciones, animaciones
+   - Separación entre contenido (HTML) y presentación (CSS)
+   
+   ANATOMÍA DE UNA REGLA CSS:
+   
+   selector {
+       propiedad: valor;
+   }
+   
+   selector: QUÉ elementos seleccionar
+   propiedad: QUÉ característica modificar
+   valor: CÓMO modificarla
+   
+========================================== */
+
+/* ==========================================
+   RESET Y CONFIGURACIÓN BASE
+   
+   Elimina estilos por defecto del navegador
+   para tener control total sobre el diseño
+========================================== */
+
+/* SELECTOR UNIVERSAL (*)
+   Selecciona TODOS los elementos del documento
+   Útil para reset general
+*/
+* {
+    margin: 0;
+    /* margin: Espacio EXTERIOR del elemento
+       - Separa elementos entre sí
+       - 0 = Sin margen
+       - No tiene color de fondo
+       - Colapsa entre elementos adyacentes
+    */
+    
+    padding: 0;
+    /* padding: Espacio INTERIOR del elemento
+       - Espacio entre contenido y borde
+       - 0 = Sin relleno
+       - Tiene el color de fondo del elemento
+    */
+    
+    box-sizing: border-box;
+    /* box-sizing: Cómo calcular el tamaño total
+       - content-box (default): width = solo contenido
+       - border-box: width = contenido + padding + border
+       - RECOMENDADO: border-box para facilitar cálculos
+       
+       Ejemplo con width: 200px y padding: 20px:
+       content-box: ancho total = 240px (200 + 20*2)
+       border-box: ancho total = 200px (todo incluido)
+    */
+}
+
+/* ==========================================
+   BOX MODEL (MODELO DE CAJA)
+   
+   Cada elemento HTML es una caja rectangular:
+   
+   ┌────────── MARGIN ──────────┐
+   │ ┌────── BORDER ──────────┐ │
+   │ │ ┌──── PADDING ───────┐ │ │
+   │ │ │                    │ │ │
+   │ │ │     CONTENT        │ │ │
+   │ │ │                    │ │ │
+   │ │ └────────────────────┘ │ │
+   │ └────────────────────────┘ │
+   └────────────────────────────┘
+   
+========================================== */
+
+/* SELECTOR DE ELEMENTO
+   Selecciona todos los elementos <body>
+   Solo hay uno, pero se aplica a todos los body
+*/
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* font-family: Tipo de fuente
+       - Lista de fuentes separadas por comas
+       - Si no tiene la primera, usa la segunda, etc.
+       - sans-serif: Fuente genérica sin serif
+       - Usar comillas para nombres con espacios
+    */
+    
+    line-height: 1.6;
+    /* line-height: Altura de línea (interlineado)
+       - Sin unidad: Multiplicador del tamaño de fuente
+       - 1.6 = 1.6 veces el tamaño de fuente
+       - Mejora legibilidad (1.4-1.8 recomendado)
+    */
+    
+    color: #333;
+    /* color: Color del TEXTO
+       - #333: Hexadecimal (gris oscuro)
+       - Formato: #RRGGBB (Red Green Blue)
+       - #333 = #333333 (atajo)
+    */
+    
+    background-color: #f5f5f5;
+    /* background-color: Color de FONDO
+       - #f5f5f5: Gris muy claro
+       - Diferente de 'color' (que es para texto)
+    */
+}
+
+/* ==========================================
+   HEADER - ENCABEZADO
+========================================== */
+
+/* SELECTOR DE CLASE
+   Selecciona elementos con class="site-header"
+   Se puede reutilizar en múltiples elementos
+   Precedido por punto (.)
+*/
+.site-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* background: Propiedad abreviada para fondo
+       
+       linear-gradient: Gradiente lineal
+       - 135deg: Ángulo (0° = arriba, 90° = derecha, 180° = abajo)
+       - color posición: #667eea en 0%, #764ba2 en 100%
+       - Transición suave entre colores
+    */
+    
+    color: white;
+    /* Texto blanco */
+    
+    padding: 20px 40px;
+    /* padding: Relleno interno
+       - 1 valor: todos los lados
+       - 2 valores: vertical horizontal
+       - 4 valores: top right bottom left (sentido horario)
+       
+       20px 40px = 20px arriba/abajo, 40px izquierda/derecha
+    */
+    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* box-shadow: Sombra de caja
+       - offset-x offset-y blur spread color
+       - 0: Sin desplazamiento horizontal
+       - 4px: Desplazamiento vertical (hacia abajo)
+       - 10px: Difuminado (blur)
+       - 0: Sin expansión (spread)
+       - rgba(0,0,0,0.2): Negro con 20% opacidad
+       
+       rgba = Red Green Blue Alpha (transparencia)
+    */
+    
+    position: sticky;
+    /* position: Posicionamiento del elemento
+       
+       TIPOS:
+       - static (default): Flujo normal
+       - relative: Relativo a su posición original
+       - absolute: Relativo al ancestro posicionado
+       - fixed: Fijo respecto a la ventana
+       - sticky: Normal hasta scroll, luego fixed
+       
+       sticky: Se comporta normal hasta que llega
+       al punto especificado (top), luego se fija
+    */
+    
+    top: 0;
+    /* top: Posición desde arriba
+       - Se usa con position: sticky/fixed/absolute
+       - 0 = Se fija cuando llega al tope
+    */
+    
+    z-index: 1000;
+    /* z-index: Orden de apilamiento (eje Z)
+       - Mayor número = más al frente
+       - Solo funciona con position: relative/absolute/fixed/sticky
+       - Valores comunes: 1, 10, 100, 1000
+    */
+}
+
+.header-container {
+    max-width: 1200px;
+    /* max-width: Ancho máximo
+       - El elemento no será más ancho que esto
+       - Puede ser más pequeño
+       - Útil para limitar contenido en pantallas grandes
+    */
+    
+    margin: 0 auto;
+    /* margin: auto = Centrado horizontal
+       - 0: Sin margen arriba/abajo
+       - auto: Margen automático izquierda/derecha
+       - REQUIERE ancho definido (width o max-width)
+    */
+    
+    display: flex;
+    /* display: Tipo de visualización
+       
+       flex: Activa FLEXBOX
+       - Sistema de layout unidimensional
+       - Facilita alineación y distribución
+       - El contenedor se vuelve "flex container"
+       - Los hijos directos son "flex items"
+    */
+    
+    justify-content: space-between;
+    /* justify-content: Alineación en eje PRINCIPAL (horizontal)
+       
+       VALORES:
+       - flex-start: Al inicio
+       - flex-end: Al final
+       - center: Centrado
+       - space-between: Espaciado entre elementos (extremos pegados)
+       - space-around: Espaciado alrededor de cada elemento
+       - space-evenly: Espaciado uniforme
+    */
+    
+    align-items: center;
+    /* align-items: Alineación en eje CRUZADO (vertical)
+       
+       VALORES:
+       - flex-start: Arriba
+       - flex-end: Abajo
+       - center: Centro
+       - stretch: Estirar (default)
+       - baseline: Línea base del texto
+    */
+    
+    flex-wrap: wrap;
+    /* flex-wrap: Si los elementos deben saltar de línea
+       - nowrap (default): Una sola línea
+       - wrap: Múltiples líneas si es necesario
+       - wrap-reverse: Múltiples líneas invertidas
+    */
+    
+    gap: 20px;
+    /* gap: Espacio entre flex items
+       - Más simple que margin
+       - Afecta solo al espacio entre elementos
+    */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-icon {
+    font-size: 2em;
+    /* em: Unidad RELATIVA al tamaño de fuente del PADRE
+       - 2em = 2 veces el tamaño de fuente heredado
+       - Escala con el tamaño de fuente
+    */
+}
+
+.logo h1 {
+    font-size: 1.8em;
+    margin: 0;
+}
+
+.tagline {
+    font-size: 0.9em;
+    /* 0.9em = 90% del tamaño de fuente del padre */
+    
+    opacity: 0.95;
+    /* opacity: Transparencia
+       - 0 = Completamente transparente
+       - 1 = Completamente opaco
+       - 0.95 = 95% visible
+    */
+}
+
+/* ==========================================
+   NAVEGACIÓN
+========================================== */
+
+.main-nav ul {
+    list-style: none;
+    /* list-style: Estilo de viñetas de lista
+       - none: Sin viñetas
+       - disc: Círculo relleno (default para ul)
+       - circle: Círculo vacío
+       - square: Cuadrado
+       - decimal: Números (para ol)
+    */
+    
+    display: flex;
+    gap: 15px;
+}
+
+.main-nav a {
+    color: white;
+    text-decoration: none;
+    /* text-decoration: Decoración del texto
+       - none: Sin decoración
+       - underline: Subrayado
+       - overline: Línea arriba
+       - line-through: Tachado
+    */
+    
+    padding: 10px 18px;
+    border-radius: 8px;
+    /* border-radius: Redondea esquinas
+       - 1 valor: Todas las esquinas
+       - 2 valores: top-left/bottom-right, top-right/bottom-left
+       - 4 valores: top-left, top-right, bottom-right, bottom-left
+    */
+    
+    transition: all 0.3s ease;
+    /* transition: Animación suave entre estados
+       - propiedad duración función retardo
+       - all: Todas las propiedades que cambien
+       - 0.3s: 0.3 segundos
+       - ease: Función de tiempo (lento-rápido-lento)
+       
+       FUNCIONES:
+       - linear: Velocidad constante
+       - ease: Lento-rápido-lento (default)
+       - ease-in: Acelera al inicio
+       - ease-out: Desacelera al final
+       - ease-in-out: Acelera y desacelera
+    */
+    
+    font-weight: 500;
+    /* font-weight: Grosor de la fuente
+       - normal = 400
+       - bold = 700
+       - 100-900: Valores numéricos
+       - lighter/bolder: Relativos
+    */
+}
+
+/* PSEUDO-CLASE :hover
+   Se aplica cuando el mouse pasa sobre el elemento
+   Muy útil para feedback visual
+*/
+.main-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    /* rgba: Red Green Blue Alpha
+       - Último valor (0.2) = 20% de opacidad
+       - Blanco con 20% opacidad
+    */
+    
+    transform: translateY(-2px);
+    /* transform: Transformación 2D/3D
+       
+       translateY: Desplazamiento vertical
+       - Valores positivos: Hacia abajo
+       - Valores negativos: Hacia arriba
+       - -2px: Mueve 2px hacia arriba
+       
+       OTRAS TRANSFORMACIONES:
+       - translateX: Horizontal
+       - translate(x, y): Ambos ejes
+       - rotate(deg): Rotación
+       - scale(n): Escala (1 = 100%)
+       - skew(deg): Inclinar
+    */
+}
+
+/* ==========================================
+   SECCIÓN HERO
+========================================== */
+
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 120px 20px;
+    text-align: center;
+    /* text-align: Alineación del texto
+       - left: Izquierda (default)
+       - right: Derecha
+       - center: Centro
+       - justify: Justificado
+    */
+    
+    min-height: 500px;
+    /* min-height: Altura mínima
+       - El elemento tendrá AL MENOS esta altura
+       - Puede crecer si el contenido lo requiere
+    */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-title {
+    font-size: 3em;
+    /* 3em = 3 veces el tamaño base */
+    
+    margin-bottom: 25px;
+    /* margin-bottom: Margen solo en la parte inferior */
+    
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    /* text-shadow: Sombra del texto
+       - offset-x offset-y blur color
+       - 3px: Desplazamiento horizontal
+       - 3px: Desplazamiento vertical
+       - 6px: Difuminado
+       - Negro con 40% opacidad
+    */
+    
+    animation: fadeInDown 1s ease-out;
+    /* animation: Animación CSS
+       - nombre duración función retardo iteraciones dirección fill-mode
+       - fadeInDown: Nombre de la animación (@keyframes)
+       - 1s: Duración
+       - ease-out: Desacelera al final
+    */
+}
+
+/* KEYFRAMES: Define una animación
+   Se puede reutilizar con diferentes elementos
+*/
+@keyframes fadeInDown {
+    /* Estado inicial (0% o from) */
+    from {
+        opacity: 0;
+        /* Invisible */
+        transform: translateY(-30px);
+        /* 30px arriba */
+    }
+    
+    /* Estado final (100% o to) */
+    to {
+        opacity: 1;
+        /* Visible */
+        transform: translateY(0);
+        /* Posición original */
+    }
+}
+
+.hero-subtitle {
+    font-size: 1.4em;
+    margin-bottom: 40px;
+    opacity: 0.95;
+}
+
+.hero-pillars {
+    display: grid;
+    /* display: grid = Activa CSS GRID
+       - Sistema de layout BIDIMENSIONAL
+       - Controla filas Y columnas simultáneamente
+       - Más potente que Flexbox para layouts complejos
+    */
+    
+    grid-template-columns: repeat(3, 1fr);
+    /* grid-template-columns: Define las columnas
+       
+       repeat(3, 1fr):
+       - repeat: Función para repetir patrón
+       - 3: Número de repeticiones
+       - 1fr: 1 fracción del espacio disponible
+       
+       Resultado: 3 columnas de igual ancho
+       
+       OTRAS OPCIONES:
+       - 200px 1fr 2fr: Columnas de diferentes tamaños
+       - repeat(auto-fit, minmax(250px, 1fr)): Responsive
+    */
+    
+    gap: 30px;
+    /* gap: Espacio entre celdas del grid
+       - Un solo valor: mismo para filas y columnas
+       - Dos valores: row-gap column-gap
+    */
+    
+    margin: 40px 0;
+    /* 40px arriba/abajo, 0 izquierda/derecha */
+}
+
+.pillar {
+    background: rgba(255, 255, 255, 0.15);
+    /* Fondo blanco semi-transparente */
+    
+    backdrop-filter: blur(10px);
+    /* backdrop-filter: Filtro al contenido detrás
+       - blur: Desenfoque (efecto vidrio esmerilado)
+       - Solo funciona con transparencia
+       - Efecto glassmorphism moderno
+    */
+    
+    padding: 35px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    /* border: grosor estilo color
+       - solid: Línea continua
+       - dashed: Línea discontinua
+       - dotted: Puntos
+       - double: Doble línea
+    */
+    
+    transition: all 0.3s ease;
+}
+
+.pillar:hover {
+    transform: translateY(-10px) scale(1.03);
+    /* Múltiples transformaciones separadas por espacio
+       - translateY(-10px): Sube 10px
+       - scale(1.03): Aumenta 3% el tamaño
+    */
+    
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.pillar-icon {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+}
+
+/* ==========================================
+   CONTENEDOR GENERAL
+========================================== */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    /* Patrón común para centrar contenido
+       y agregar padding lateral
+    */
+}
+
+.section-title {
+    font-size: 2.5em;
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.section-subtitle {
+    font-size: 1.2em;
+    text-align: center;
+    color: #666;
+    margin-bottom: 50px;
+}
+
+/* ==========================================
+   SECCIONES DE CONTENIDO
+========================================== */
+
+.event-info-section,
+.pillar-section,
+.speakers-section,
+.registration-section {
+    padding: 80px 0;
+    /* 80px arriba/abajo, 0 izquierda/derecha */
+}
+
+.event-info-section {
+    background: white;
+}
+
+.pillar-section {
+    color: white;
+}
+
+.innovation {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+}
+
+.technology {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    /* Gradiente con 3 colores (punto medio en 50%) */
+}
+
+.future {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+}
+
+/* ==========================================
+   GRIDS DE CONTENIDO
+========================================== */
+
+.info-grid,
+.content-grid,
+.speakers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* auto-fit: Ajusta automáticamente las columnas
+       minmax(280px, 1fr):
+       - Mínimo 280px
+       - Máximo 1 fracción
+       - Crea diseño RESPONSIVE automático
+       
+       Si el espacio permite, crea más columnas
+       Si no hay espacio, menos columnas (hasta 1)
+    */
+    
+    gap: 30px;
+}
+
+.info-card,
+.content-card,
+.speaker-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    /* overflow: Qué hacer con contenido que se desborda
+       - visible (default): Se muestra fuera
+       - hidden: Se oculta
+       - scroll: Siempre muestra scrollbar
+       - auto: Scrollbar solo si es necesario
+       
+       hidden con border-radius: Recorta imágenes
+       dentro del borde redondeado
+    */
+    
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.info-card:hover,
+.content-card:hover,
+.speaker-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.3);
+}
+
+.info-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 35px;
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.card-image {
+    width: 100%;
+    /* 100%: Todo el ancho del contenedor */
+    
+    height: 250px;
+    object-fit: cover;
+    /* object-fit: Cómo ajustar imagen al contenedor
+       - fill: Estira (default)
+       - contain: Ajusta sin cortar (puede dejar espacios)
+       - cover: Rellena cortando exceso (RECOMENDADO)
+       - none: Tamaño original
+       - scale-down: El más pequeño entre contain y none
+    */
+}
+
+.card-content {
+    padding: 25px;
+}
+
+/* ==========================================
+   LISTAS DE TECNOLOGÍA
+========================================== */
+
+.tech-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 0;
+}
+
+.tech-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.tech-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(10px);
+    /* translateX: Desplazamiento horizontal
+       - Positivo: Derecha
+       - Negativo: Izquierda
+    */
+}
+
+.tech-icon {
+    font-size: 2.5em;
+    display: block;
+    /* display: block = Elemento en bloque
+       - Hace que el emoji ocupe su propia línea
+    */
+    margin-bottom: 15px;
+}
+
+/* ==========================================
+   ESTADÍSTICAS
+========================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.stat-card {
+    background: rgba(102, 126, 234, 0.2);
+    padding: 40px;
+    border-radius: 15px;
+    border: 3px solid rgba(102, 126, 234, 0.5);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: scale(1.08);
+    /* scale: Escalar (agrandar/achicar)
+       - 1 = 100% (tamaño original)
+       - 1.08 = 108% (8% más grande)
+       - 0.9 = 90% (10% más pequeño)
+    */
+    border-color: #667eea;
+}
+
+.stat-number {
+    font-size: 3.5em;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 1.1em;
+}
+
+/* ==========================================
+   SPEAKERS / PONENTES
+========================================== */
+
+.speaker-image {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+
+.speaker-info {
+    padding: 30px;
+}
+
+.speaker-info h3 {
+    color: #764ba2;
+    margin-bottom: 10px;
+}
+
+.speaker-title {
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.speaker-bio {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.speaker-topic {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ==========================================
+   FORMULARIO DE REGISTRO
+   
+   Esta es la sección MÁS IMPORTANTE
+   Estilos para todos los elementos del formulario
+========================================== */
+
+.registration-section {
+    background: #f9f9f9;
+}
+
+.form-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.form-intro {
+    text-align: center;
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.required-mark {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* ==========================================
+   FIELDSET: Grupo de campos
+========================================== */
+
+.form-section {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    background-color: #fafafa;
+}
+
+.form-section legend {
+    color: #764ba2;
+    font-size: 1.4em;
+    font-weight: bold;
+    padding: 0 15px;
+}
+
+/* ==========================================
+   FORM GROUP: Contenedor label + input
+========================================== */
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label-main {
+    display: block;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 1.05em;
+}
+
+.form-group label {
+    display: block;
+    color: #444;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.info-text {
+    color: #666;
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+/* ==========================================
+   INPUTS: Campos de texto
+========================================== */
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+    /* SELECTOR DE ATRIBUTO
+       Selecciona inputs según su atributo type
+       Formato: elemento[atributo="valor"]
+    */
+    
+    width: 100%;
+    /* 100%: Todo el ancho del contenedor padre */
+    
+    padding: 14px 18px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: inherit;
+    /* inherit: Hereda el valor del padre
+       - Usa la misma fuente que el body
+    */
+    
+    background-color: white;
+    transition: all 0.3s ease;
+    
+    outline: none;
+    /* outline: Borde exterior (diferente de border)
+       - Se muestra al enfocar el elemento
+       - none: Sin outline
+       - Eliminamos el default para usar nuestro estilo
+    */
+}
+
+/* PSEUDO-CLASE :focus
+   Se aplica cuando el elemento está enfocado
+   (al hacer clic o usar Tab)
+*/
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+    /* 0 0 0 3px: Sin offset, difuminado de 3px
+       - Crea un resplandor alrededor del campo
+    */
+}
+
+/* PSEUDO-CLASE :placeholder-shown
+   Se aplica cuando el placeholder es visible
+   (campo vacío)
+*/
+.form-group input:not(:placeholder-shown):valid {
+    /* :not() = NEGACIÓN
+       :placeholder-shown = placeholder visible
+       :valid = campo válido
+       
+       Combinado: Campo con texto Y válido
+    */
+    border-color: #51cf66;
+    /* Verde = válido */
+}
+
+.form-group input:not(:placeholder-shown):invalid {
+    border-color: #ff6b6b;
+    /* Rojo = inválido */
+}
+
+/* ==========================================
+   SELECT: Lista desplegable
+========================================== */
+
+select {
+    cursor: pointer;
+    /* cursor: Tipo de cursor
+       - pointer: Manita (clicable)
+       - default: Flecha normal
+       - text: I (selección de texto)
+       - move: Cruz (movible)
+       - not-allowed: Prohibido
+    */
+    
+    appearance: none;
+    /* appearance: Apariencia nativa del navegador
+       - none: Elimina estilo por defecto
+       - Permite personalizar completamente
+    */
+    
+    /* Flecha personalizada con SVG en línea */
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3e%3cpolyline points="6 9 12 15 18 9"%3e%3c/polyline%3e%3c/svg%3e');
+    /* data:image/svg+xml: SVG en línea (Base64)
+       - Evita archivo externo
+       - %23 = # (codificado para URL)
+    */
+    
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    /* Posición de la imagen de fondo
+       - right 12px: 12px desde la derecha
+       - center: Centrado verticalmente
+    */
+    
+    background-size: 20px;
+    padding-right: 45px;
+    /* Espacio para la flecha */
+}
+
+/* ==========================================
+   TEXTAREA: Área de texto multilínea
+========================================== */
+
+textarea {
+    resize: vertical;
+    /* resize: Control de redimensionamiento
+       - none: No redimensionable
+       - vertical: Solo vertical
+       - horizontal: Solo horizontal
+       - both: Ambas direcciones (default)
+    */
+    
+    min-height: 120px;
+    /* Altura mínima del textarea */
+}
+
+/* ==========================================
+   FORM ROW: Campos en la misma fila
+========================================== */
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Dos columnas de igual tamaño */
+    gap: 20px;
+}
+
+/* ==========================================
+   CHECKBOXES Y RADIO BUTTONS
+========================================== */
+
+.checkbox-grid,
+.radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.checkbox-label,
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: 2px solid transparent;
+    /* transparent: Color transparente
+       - Reserva espacio para el borde
+       - Evita saltos al aplicar hover
+    */
+}
+
+.checkbox-label:hover,
+.radio-label:hover {
+    background-color: #f5f5f5;
+    border-color: #667eea;
+}
+
+/* Estilos para checkbox y radio */
+input[type="checkbox"],
+input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+    /* accent-color: Color de controles (moderno)
+       - Cambia el color de checkbox, radio, range
+       - Solo navegadores modernos
+    */
+}
+
+.checkbox-text,
+.radio-text {
+    flex: 1;
+    /* flex: 1 = Ocupa espacio disponible */
+}
+
+/* ==========================================
+   FIELD HINT: Mensaje de ayuda
+========================================== */
+
+.field-hint {
+    display: block;
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 5px;
+    font-style: italic;
+    /* font-style: Estilo de fuente
+       - normal: Normal
+       - italic: Cursiva
+       - oblique: Oblicua
+    */
+}
+
+/* ==========================================
+   BOTONES
+========================================== */
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 16px 35px;
+    font-size: 1.15em;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 180px;
+    /* min-width: Ancho mínimo
+       - No será más pequeño que esto
+    */
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* PSEUDO-CLASE :active
+   Se aplica mientras se hace clic
+   (botón presionado)
+*/
+.btn-primary:active {
+    transform: translateY(0);
+    /* Vuelve a posición original al presionar */
+}
+
+.btn-secondary {
+    background-color: #f0f0f0;
+    color: #555;
+    border: 2px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background-color: #e5e5e5;
+    border-color: #ccc;
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.site-footer {
+    background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+    color: white;
+    padding: 60px 20px 30px;
+    margin-top: 80px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section h3 {
+    color: #667eea;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #764ba2;
+    padding-bottom: 10px;
+    display: inline-block;
+    /* inline-block: Híbrido entre inline y block
+       - Se comporta como inline (fluye con texto)
+       - Acepta width, height, margin vertical
+       - Ideal para botones y elementos inline con dimensiones
+    */
+}
+
+.contact-list,
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.contact-list li,
+.footer-links li {
+    margin-bottom: 15px;
+}
+
+.footer-section a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #667eea;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.social-links a {
+    width: 50px;
+    height: 50px;
+    background: rgba(102, 126, 234, 0.2);
+    border-radius: 50%;
+    /* 50% crea un círculo perfecto
+       (si width = height)
+    */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: #667eea;
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   
+   Media Queries: Estilos condicionales
+   según el tamaño de pantalla
+========================================== */
+
+/* MEDIA QUERY: Para tablets y móviles
+   max-width: 768px = Se aplica cuando el ancho
+   de la pantalla es 768px o menor
+*/
+@media (max-width: 768px) {
+    /* @media: Regla condicional
+       
+       SINTAXIS:
+       @media (condición) {
+           estilos
+       }
+       
+       CONDICIONES COMUNES:
+       - max-width: Ancho máximo
+       - min-width: Ancho mínimo
+       - orientation: portrait/landscape
+       - prefers-color-scheme: dark/light
+    */
+    
+    /* Ajustes del header */
+    .header-container {
+        flex-direction: column;
+        /* Cambia de horizontal a vertical */
+        text-align: center;
+    }
+    
+    .logo h1 {
+        font-size: 1.5em;
+        /* Reduce tamaño en móviles */
+    }
+    
+    /* Navegación en vertical */
+    .main-nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .main-nav a {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* Hero section */
+    .hero-title {
+        font-size: 2em;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1em;
+    }
+    
+    .hero-pillars {
+        grid-template-columns: 1fr;
+        /* Una sola columna en móvil */
+    }
+    
+    /* Secciones de contenido */
+    .section-title {
+        font-size: 2em;
+    }
+    
+    .info-grid,
+    .content-grid,
+    .speakers-grid,
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tech-list {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Formulario */
+    .form-wrapper {
+        padding: 30px 20px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        /* Campos apilados verticalmente */
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+    
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* MEDIA QUERY: Para móviles pequeños */
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 80px 15px;
+    }
+    
+    .hero-title {
+        font-size: 1.6em;
+    }
+    
+    .form-section {
+        padding: 20px 15px;
+    }
+    
+    .checkbox-grid,
+    .radio-group {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================
+   UTILIDADES
+   
+   Clases auxiliares reutilizables
+========================================== */
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+    /* display: none = Oculta elemento
+       - No ocupa espacio
+       - No es clickable
+       - Diferente de visibility: hidden
+         (que oculta pero mantiene espacio)
+    */
+}
+
+/* ==========================================
+   FIN DE LOS ESTILOS
+   
+   RESUMEN DE CONCEPTOS CSS:
+   
+   1. SELECTORES:
+      - Universal (*)
+      - Elemento (p, div)
+      - Clase (.nombre)
+      - ID (#nombre)
+      - Atributo ([type="text"])
+      - Pseudo-clases (:hover, :focus)
+      - Descendiente (padre hijo)
+   
+   2. BOX MODEL:
+      content → padding → border → margin
+   
+   3. UNIDADES:
+      - px: Píxeles (absoluta)
+      - em: Relativa al padre
+      - rem: Relativa a raíz
+      - %: Porcentaje
+      - vh/vw: Viewport
+   
+   4. COLORES:
+      - Nombre: red, blue
+      - Hex: #FF0000
+      - RGB: rgb(255, 0, 0)
+      - RGBA: rgba(255, 0, 0, 0.5)
+   
+   5. FLEXBOX:
+      - display: flex
+      - justify-content: Horizontal
+      - align-items: Vertical
+      - flex-direction: Dirección
+      - gap: Espaciado
+   
+   6. GRID:
+      - display: grid
+      - grid-template-columns: Columnas
+      - grid-template-rows: Filas
+      - gap: Espaciado
+   
+   7. POSITION:
+      - static: Normal
+      - relative: Relativo a posición
+      - absolute: Relativo a ancestro
+      - fixed: Fijo a ventana
+      - sticky: Normal + fixed
+   
+   8. TRANSITIONS:
+      - transition: propiedad duración función
+      - Animaciones suaves
+   
+   9. TRANSFORMS:
+      - translate: Mover
+      - rotate: Rotar
+      - scale: Escalar
+      - skew: Inclinar
+   
+   10. RESPONSIVE:
+       - Media queries
+       - Mobile-first
+       - Breakpoints estándar
+       
+========================================== */

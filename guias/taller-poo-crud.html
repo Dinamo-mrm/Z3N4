@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POO en Acción: Mi Primer Sistema de Gestión</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a25;
+    --surface3: #22223a;
+    --border: #2a2a40;
+    --accent: #7c6af7;
+    --accent2: #f76a8a;
+    --accent3: #6af7c8;
+    --accent4: #f7c46a;
+    --text: #e8e8f0;
+    --text-muted: #7878a0;
+    --code-bg: #0d0d16;
+    --m1: #7c6af7;
+    --m2: #f76a8a;
+    --m3: #6af7c8;
+    --m4: #f7c46a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID BG ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,106,247,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 64px 0 48px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 56px;
+  }
+  .hero-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    padding: 4px 12px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+  .module-nav {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .05em;
+  }
+  .nav-btn:hover, .nav-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(124,106,247,.08); }
+
+  /* ── MODULES ── */
+  .module { display: none; animation: fadeUp .35s ease; }
+  .module.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MODULE HEADER ── */
+  .mod-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .mod-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--bg);
+    padding: 6px 12px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-top: 6px;
+    font-weight: 700;
+    letter-spacing: .08em;
+  }
+  .m1 .mod-number { background: var(--m1); }
+  .m2 .mod-number { background: var(--m2); }
+  .m3 .mod-number { background: var(--m3); color: #0a0a0f; }
+  .m4 .mod-number { background: var(--m4); color: #0a0a0f; }
+  .mod-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+  .mod-subtitle { color: var(--text-muted); font-size: .9rem; margin-top: 6px; line-height: 1.5; }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 32px; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .m1 .section-label { color: var(--m1); }
+  .m2 .section-label { color: var(--m2); }
+  .m3 .section-label { color: var(--m3); }
+  .m4 .section-label { color: var(--m4); }
+
+  /* ── WHY BOX ── */
+  .why-box {
+    background: var(--surface2);
+    border-left: 3px solid;
+    border-radius: 0 6px 6px 0;
+    padding: 18px 22px;
+    font-size: .95rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+  .why-box strong { color: var(--text); }
+  .m1 .why-box { border-color: var(--m1); }
+  .m2 .why-box { border-color: var(--m2); }
+  .m3 .why-box { border-color: var(--m3); }
+  .m4 .why-box { border-color: var(--m4); }
+
+  /* ── METAPHOR ── */
+  .metaphor {
+    background: var(--surface3);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: .88rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 10px;
+  }
+  .metaphor strong { color: var(--text); font-style: normal; }
+
+  /* ── CODE BLOCK ── */
+  .code-wrap { position: relative; margin-top: 6px; }
+  .code-label {
+    position: absolute;
+    top: -1px; right: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 0 5px 0 5px;
+    color: var(--bg);
+  }
+  .m1 .code-label { background: var(--m1); }
+  .m2 .code-label { background: var(--m2); }
+  .m3 .code-label { background: var(--m3); }
+  .m4 .code-label { background: var(--m4); }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px 20px 18px;
+    overflow-x: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: .78rem;
+    line-height: 1.75;
+    tab-size: 2;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  /* Syntax highlight */
+  .kw  { color: #c792ea; }
+  .cl  { color: #82aaff; }
+  .fn  { color: #82ffd6; }
+  .str { color: #c3e88d; }
+  .cm  { color: #546e7a; font-style: italic; }
+  .nb  { color: #f78c6c; }
+  .op  { color: #89ddff; }
+  .acc { color: #f76a8a; }
+  .acc2{ color: #f7c46a; }
+
+  /* ── CHALLENGE BOX ── */
+  .challenge {
+    background: var(--surface);
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .m1 .challenge { border-color: rgba(124,106,247,.35); }
+  .m2 .challenge { border-color: rgba(247,106,138,.35); }
+  .m3 .challenge { border-color: rgba(106,247,200,.35); }
+  .m4 .challenge { border-color: rgba(247,196,106,.35); }
+  .challenge-title {
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: .04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .m1 .challenge-title { color: var(--m1); }
+  .m2 .challenge-title { color: var(--m2); }
+  .m3 .challenge-title { color: var(--m3); }
+  .m4 .challenge-title { color: var(--m4); }
+  .challenge ul { padding-left: 20px; }
+  .challenge li { font-size: .88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 4px; }
+  .challenge li strong { color: var(--text); }
+
+  /* ── DEMO APP ── */
+  .demo-section {
+    margin-top: 60px;
+    border-top: 1px solid var(--border);
+    padding-top: 48px;
+  }
+  .demo-header { text-align: center; margin-bottom: 36px; }
+  .demo-header h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+  .demo-header p { color: var(--text-muted); font-size: .9rem; }
+
+  .app-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
+  @media(max-width: 700px) { .app-grid { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .panel-head {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 12px 18px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .d1 { background: var(--m1); }
+  .d2 { background: var(--m2); }
+  .d3 { background: var(--m3); }
+
+  .panel-body { padding: 20px; }
+
+  /* Form */
+  .field { margin-bottom: 14px; }
+  label {
+    display: block;
+    font-size: .78rem;
+    letter-spacing: .06em;
+    font-family: 'Space Mono', monospace;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  input, select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: .9rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  select option { background: var(--surface2); }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .checkbox-row input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--m2);
+    cursor: pointer;
+  }
+  .checkbox-row span { font-size: .88rem; color: var(--text-muted); }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 11px;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #9080f9; transform: translateY(-1px); }
+
+  .search-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .search-bar input { flex: 1; }
+  .btn-sm {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: .8rem;
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s;
+  }
+  .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Task List */
+  #taskList { display: flex; flex-direction: column; gap: 8px; min-height: 100px; }
+  .task-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: all .25s;
+    animation: slideIn .25s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .task-item.urgente { border-left: 3px solid var(--m2); }
+  .task-item:hover { border-color: var(--accent); }
+  .task-info { flex: 1; }
+  .task-name { font-weight: 700; font-size: .9rem; margin-bottom: 4px; }
+  .task-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    padding: 2px 7px;
+    border-radius: 2px;
+    letter-spacing: .04em;
+  }
+  .tag-cat { background: rgba(124,106,247,.15); color: var(--m1); }
+  .tag-urgente { background: rgba(247,106,138,.15); color: var(--m2); }
+  .tag-normal { background: rgba(106,247,200,.1); color: var(--m3); }
+  .tag-id { background: var(--surface3); color: var(--text-muted); }
+  .btn-del {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+    flex-shrink: 0;
+  }
+  .btn-del:hover { border-color: var(--m2); color: var(--m2); }
+
+  .empty-state {
+    text-align: center;
+    padding: 32px;
+    color: var(--text-muted);
+    font-size: .85rem;
+    font-family: 'Space Mono', monospace;
+  }
+  .empty-state::before { content: '[ ]'; display: block; font-size: 1.5rem; margin-bottom: 8px; opacity: .4; }
+
+  .counter-bar {
+    display: flex;
+    gap: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: .75rem;
+    color: var(--text-muted);
+    padding: 10px 0 0;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+  }
+  .counter-bar span strong { color: var(--text); }
+
+  /* Module progress */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 36px;
+    justify-content: center;
+  }
+  .progress-seg {
+    height: 3px;
+    flex: 1;
+    max-width: 80px;
+    background: var(--surface3);
+    border-radius: 2px;
+    transition: background .3s;
+    cursor: pointer;
+  }
+  .progress-seg.done { background: var(--accent); }
+  .progress-seg.m1-done { background: var(--m1); }
+  .progress-seg.m2-done { background: var(--m2); }
+  .progress-seg.m3-done { background: var(--m3); }
+  .progress-seg.m4-done { background: var(--m4); }
+
+  /* Log Console */
+  .console-log {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    max-height: 100px;
+    overflow-y: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: .72rem;
+    color: var(--m3);
+  }
+  .console-log div::before { content: '> '; color: var(--text-muted); }
+  .log-warn { color: var(--m4) !important; }
+  .log-err  { color: var(--m2) !important; }
+
+  /* Table */
+  .info-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  .info-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+  .info-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    color: var(--text-muted);
+    font-size: .82rem;
+  }
+  .info-table td:first-child { color: var(--text); font-weight: 600; }
+
+  /* Responsive */
+  @media(max-width: 600px) {
+    .mod-header { flex-direction: column; }
+    .mod-number { align-self: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-badge">Taller Práctico · ES6+ · POO</div>
+    <h1>POO en Acción:<br><span>Mi Primer Sistema de Gestión</span></h1>
+    <p>Aprende a dejar las funciones sueltas y construye aplicaciones reales usando el patrón <strong>Entidad + Gestora</strong>.</p>
+    <nav class="module-nav">
+      <button class="nav-btn active" onclick="showModule(0)">01 · La Entidad</button>
+      <button class="nav-btn" onclick="showModule(1)">02 · El Cerebro</button>
+      <button class="nav-btn" onclick="showModule(2)">03 · Herencia</button>
+      <button class="nav-btn" onclick="showModule(3)">04 · DOM + POO</button>
+      <button class="nav-btn" onclick="showModule(4)">▶ Demo en Vivo</button>
+    </nav>
+  </header>
+
+  <div class="progress-bar">
+    <div class="progress-seg m1-done" id="seg0" onclick="showModule(0)"></div>
+    <div class="progress-seg" id="seg1" onclick="showModule(1)"></div>
+    <div class="progress-seg" id="seg2" onclick="showModule(2)"></div>
+    <div class="progress-seg" id="seg3" onclick="showModule(3)"></div>
+    <div class="progress-seg" id="seg4" onclick="showModule(4)"></div>
+  </div>
+
+  <!-- ═══════════════ MÓDULO 01 ═══════════════ -->
+  <section class="module m1 visible" id="mod0">
+    <div class="mod-header">
+      <div class="mod-number">MÓDULO 01</div>
+      <div>
+        <div class="mod-title">La Entidad<br>Clase <code style="color:var(--m1)">Tarea</code></div>
+        <div class="mod-subtitle">El molde que define qué ES una tarea y cómo se ve desde afuera.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">¿Por qué POO?</div>
+      <div class="why-box">
+        Con variables sueltas (<code>let nombre = "Estudiar"</code>, <code>let id = 1</code>…) pierdes el
+        <strong>contexto</strong>: ¿a qué tarea pertenece ese nombre? ¿quién puede cambiarlo?
+        Una <strong>Clase Entidad</strong> agrupa los datos que van juntos, protege los atributos con
+        <code>#privados</code> y expone solo lo necesario mediante <strong>Getters</strong>.
+        Es la diferencia entre un cajón revuelto y una carpeta etiquetada.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Código Guía</div>
+      <div class="code-wrap">
+        <div class="code-label">JavaScript ES6+</div>
+        <pre><span class="cm">// ─── Clase Entidad: el "molde" de una Tarea ─────────────────</span>
+<span class="kw">class</span> <span class="cl">Tarea</span> {
+
+  <span class="cm">// Campos PRIVADOS: solo existen dentro de la clase</span>
+  <span class="acc">#id</span><span class="op">;</span>
+  <span class="acc">#nombre</span><span class="op">;</span>
+  <span class="acc">#categoria</span><span class="op">;</span>
+
+  <span class="fn">constructor</span><span class="op">(</span>id, nombre, categoria <span class="op">=</span> <span class="str">'general'</span><span class="op">) {</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#id</span>        <span class="op">=</span> id<span class="op">;</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#nombre</span>    <span class="op">=</span> nombre<span class="op">;</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#categoria</span> <span class="op">=</span> categoria<span class="op">;</span>
+  <span class="op">}</span>
+
+  <span class="cm">// ── Getters: puerta de salida de solo lectura ─────────────</span>
+  <span class="kw">get</span> <span class="fn">id</span><span class="op">()</span>        <span class="op">{</span> <span class="kw">return</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#id</span><span class="op">;</span>        <span class="op">}</span>
+  <span class="kw">get</span> <span class="fn">nombre</span><span class="op">()</span>    <span class="op">{</span> <span class="kw">return</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#nombre</span><span class="op">;</span>    <span class="op">}</span>
+  <span class="kw">get</span> <span class="fn">categoria</span><span class="op">()</span> <span class="op">{</span> <span class="kw">return</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#categoria</span><span class="op">;</span> <span class="op">}</span>
+
+  <span class="cm">// Setter con validación: evita datos corruptos</span>
+  <span class="kw">set</span> <span class="fn">nombre</span><span class="op">(</span>nuevoNombre<span class="op">) {</span>
+    <span class="kw">if</span> <span class="op">(</span>nuevoNombre<span class="op">.</span><span class="fn">trim</span><span class="op">().</span><span class="fn">length</span> <span class="op">&lt;</span> <span class="nb">3</span><span class="op">)</span>
+      <span class="kw">throw new</span> <span class="cl">Error</span><span class="op">(</span><span class="str">'El nombre debe tener al menos 3 caracteres'</span><span class="op">);</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#nombre</span> <span class="op">=</span> nuevoNombre<span class="op">.</span><span class="fn">trim</span><span class="op">();</span>
+  <span class="op">}</span>
+
+  <span class="cm">// Método de representación → útil para renderizar</span>
+  <span class="fn">toHTML</span><span class="op">() {</span>
+    <span class="kw">return</span> <span class="str">`
+      &lt;strong&gt;</span><span class="op">${</span><span class="kw">this</span><span class="op">.</span><span class="acc">#nombre</span><span class="op">}</span><span class="str">&lt;/strong&gt;
+      &lt;small&gt;[</span><span class="op">${</span><span class="kw">this</span><span class="op">.</span><span class="acc">#categoria</span><span class="op">}</span><span class="str">]&lt;/small&gt;
+    `</span><span class="op">;</span>
+  <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="cm">// ── Uso ────────────────────────────────────────────────────</span>
+<span class="kw">const</span> t <span class="op">=</span> <span class="kw">new</span> <span class="cl">Tarea</span><span class="op">(</span><span class="nb">1</span>, <span class="str">'Estudiar POO'</span>, <span class="str">'educación'</span><span class="op">);</span>
+<span class="fn">console</span><span class="op">.</span><span class="fn">log</span><span class="op">(</span>t<span class="op">.</span>nombre<span class="op">);</span>     <span class="cm">// ✅ 'Estudiar POO'</span>
+<span class="fn">console</span><span class="op">.</span><span class="fn">log</span><span class="op">(</span>t<span class="op">.</span><span class="acc">#nombre</span><span class="op">);</span>    <span class="cm">// ❌ SyntaxError: campo privado</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tabla de Atributos</div>
+      <table class="info-table">
+        <thead><tr><th>Atributo</th><th>Tipo</th><th>Acceso</th><th>Para qué sirve</th></tr></thead>
+        <tbody>
+          <tr><td>#id</td><td>Number</td><td>Solo lectura (getter)</td><td>Identificar de forma única</td></tr>
+          <tr><td>#nombre</td><td>String</td><td>get + set con validación</td><td>Mostrar en la UI</td></tr>
+          <tr><td>#categoria</td><td>String</td><td>Solo lectura (getter)</td><td>Filtrar y agrupar tareas</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Reto de Código 🎯</div>
+      <div class="challenge">
+        <div class="challenge-title">🏆 Reto 01 — Amplía la Entidad</div>
+        <ul>
+          <li><strong>Fácil:</strong> Añade un atributo <code>#fechaCreacion</code> que se asigne automáticamente con <code>new Date()</code> en el constructor.</li>
+          <li><strong>Medio:</strong> Crea un getter <code>resumen</code> que devuelva un string formateado: <code>"[1] Estudiar POO — educación"</code>.</li>
+          <li><strong>Difícil:</strong> Añade un método estático <code>Tarea.desdeObjeto(obj)</code> que reciba un objeto plano <code>&#123; id, nombre, categoria &#125;</code> y retorne una nueva instancia de <code>Tarea</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ MÓDULO 02 ═══════════════ -->
+  <section class="module m2" id="mod1">
+    <div class="mod-header">
+      <div class="mod-number">MÓDULO 02</div>
+      <div>
+        <div class="mod-title">El Cerebro<br>Clase <code style="color:var(--m2)">GestionarApp</code></div>
+        <div class="mod-subtitle">La clase administradora que organiza, guarda y opera sobre la colección de entidades.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">¿Por qué POO?</div>
+      <div class="why-box">
+        Sin una clase gestora, tu código está lleno de arrays globales (<code>let tareas = []</code>)
+        y funciones sueltas que los modifican desde cualquier lugar. Cualquier función puede
+        corromper los datos. <strong>GestionarApp encapsula el array</strong>, expone solo los
+        métodos necesarios y garantiza que los datos solo se modifiquen de forma controlada.
+      </div>
+      <div class="metaphor">
+        <strong>Metáfora:</strong> La clase administradora es como el <em>gerente de un banco</em>.
+        Tú no entras a la bóveda directamente — le pides al gerente (<code>agregar</code>,
+        <code>eliminar</code>, <code>buscar</code>) y él gestiona las cuentas (el array privado)
+        siguiendo las reglas del banco.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Código Guía</div>
+      <div class="code-wrap">
+        <div class="code-label">JavaScript ES6+</div>
+        <pre><span class="kw">class</span> <span class="cl">GestionarApp</span> {
+
+  <span class="acc">#tareas</span> <span class="op">=</span> <span class="op">[];</span>           <span class="cm">// La bóveda del banco → privada</span>
+  <span class="acc">#contadorId</span> <span class="op">=</span> <span class="nb">1</span><span class="op">;</span>        <span class="cm">// Auto-incremento de IDs</span>
+  <span class="acc">#contenedor</span><span class="op">;</span>            <span class="cm">// Referencia al nodo del DOM</span>
+
+  <span class="fn">constructor</span><span class="op">(</span>selectorContenedor<span class="op">) {</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#contenedor</span> <span class="op">=</span> <span class="fn">document</span><span class="op">.</span><span class="fn">querySelector</span><span class="op">(</span>selectorContenedor<span class="op">);</span>
+  <span class="op">}</span>
+
+  <span class="cm">// ── AGREGAR ────────────────────────────────────────────────</span>
+  <span class="fn">agregar</span><span class="op">(</span>nombre, categoria<span class="op">) {</span>
+    <span class="kw">const</span> nueva <span class="op">=</span> <span class="kw">new</span> <span class="cl">Tarea</span><span class="op">(</span><span class="kw">this</span><span class="op">.</span><span class="acc">#contadorId</span><span class="op">++,</span> nombre, categoria<span class="op">);</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#tareas</span><span class="op">.</span><span class="fn">push</span><span class="op">(</span>nueva<span class="op">);</span>
+    <span class="kw">this</span><span class="op">.</span><span class="fn">renderizar</span><span class="op">();</span>       <span class="cm">// Siempre re-renderiza</span>
+    <span class="kw">return</span> nueva<span class="op">;</span>            <span class="cm">// Retorna la instancia creada</span>
+  <span class="op">}</span>
+
+  <span class="cm">// ── ELIMINAR ───────────────────────────────────────────────</span>
+  <span class="fn">eliminar</span><span class="op">(</span>id<span class="op">) {</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#tareas</span> <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#tareas</span><span class="op">.</span><span class="fn">filter</span><span class="op">(</span>t <span class="op">=&gt;</span> t<span class="op">.</span>id <span class="op">!==</span> id<span class="op">);</span>
+    <span class="kw">this</span><span class="op">.</span><span class="fn">renderizar</span><span class="op">();</span>
+  <span class="op">}</span>
+
+  <span class="cm">// ── BUSCAR ─────────────────────────────────────────────────</span>
+  <span class="fn">buscarPorNombre</span><span class="op">(</span>termino<span class="op">) {</span>
+    <span class="kw">const</span> q <span class="op">=</span> termino<span class="op">.</span><span class="fn">toLowerCase</span><span class="op">();</span>
+    <span class="kw">return</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#tareas</span><span class="op">.</span><span class="fn">filter</span><span class="op">(</span>t <span class="op">=&gt;</span>
+      t<span class="op">.</span>nombre<span class="op">.</span><span class="fn">toLowerCase</span><span class="op">().</span><span class="fn">includes</span><span class="op">(</span>q<span class="op">)</span>
+    <span class="op">);</span>
+  <span class="op">}</span>
+
+  <span class="cm">// ── RENDERIZAR ─────────────────────────────────────────────</span>
+  <span class="fn">renderizar</span><span class="op">(</span>lista <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#tareas</span><span class="op">) {</span>
+    <span class="kw">if</span> <span class="op">(!</span>lista<span class="op">.</span>length<span class="op">) {</span>
+      <span class="kw">this</span><span class="op">.</span><span class="acc">#contenedor</span><span class="op">.</span>innerHTML <span class="op">=</span> <span class="str">'&lt;p class="empty"&gt;Sin tareas&lt;/p&gt;'</span><span class="op">;</span>
+      <span class="kw">return</span><span class="op">;</span>
+    <span class="op">}</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#contenedor</span><span class="op">.</span>innerHTML <span class="op">=</span> lista
+      <span class="op">.</span><span class="fn">map</span><span class="op">(</span>t <span class="op">=&gt;</span> <span class="str">`
+        &lt;div class="item" data-id="</span><span class="op">${</span>t<span class="op">.</span>id<span class="op">}</span><span class="str">"&gt;
+          </span><span class="op">${</span>t<span class="op">.</span><span class="fn">toHTML</span><span class="op">()}</span><span class="str">
+          &lt;button onclick="app.eliminar(</span><span class="op">${</span>t<span class="op">.</span>id<span class="op">}</span><span class="str">)"&gt;✕&lt;/button&gt;
+        &lt;/div&gt;
+      `</span><span class="op">)</span>
+      <span class="op">.</span><span class="fn">join</span><span class="op">(</span><span class="str">''</span><span class="op">);</span>
+  <span class="op">}</span>
+
+  <span class="cm">// Getter público: cuántas tareas hay (sin exponer el array)</span>
+  <span class="kw">get</span> <span class="fn">total</span><span class="op">()</span> <span class="op">{</span> <span class="kw">return</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#tareas</span><span class="op">.</span>length<span class="op">;</span> <span class="op">}</span>
+<span class="op">}</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Reto de Código 🎯</div>
+      <div class="challenge">
+        <div class="challenge-title">🏆 Reto 02 — Amplía el Cerebro</div>
+        <ul>
+          <li><strong>Fácil:</strong> Añade un método <code>obtenerTodos()</code> que retorne una copia del array (<code>[...this.#tareas]</code>), no el original.</li>
+          <li><strong>Medio:</strong> Crea <code>filtrarPorCategoria(cat)</code> que llame a <code>renderizar()</code> con el subconjunto filtrado.</li>
+          <li><strong>Difícil:</strong> Añade un método <code>editar(id, nuevoNombre)</code> que encuentre la tarea por id y use el <em>setter</em> para actualizar el nombre, manejando el error con <code>try/catch</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ MÓDULO 03 ═══════════════ -->
+  <section class="module m3" id="mod2">
+    <div class="mod-header">
+      <div class="mod-number">MÓDULO 03</div>
+      <div>
+        <div class="mod-title">Herencia en Práctica<br>Clase <code style="color:var(--m3)">TareaUrgente</code></div>
+        <div class="mod-subtitle">Especializa la entidad base sin repetir código usando <code>extends</code> y <code>super</code>.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">¿Por qué POO?</div>
+      <div class="why-box">
+        Sin herencia crearías una segunda clase copiando todo el código de <code>Tarea</code>
+        — o peor, añadirías un <code>if (esUrgente)</code> dentro de la misma clase.
+        Con <strong>herencia</strong>, <code>TareaUrgente</code> reutiliza todo de <code>Tarea</code>
+        y solo añade lo que la diferencia: <code>#prioridad</code>. Sigue el principio
+        <strong>DRY</strong> (Don't Repeat Yourself).
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Código Guía</div>
+      <div class="code-wrap">
+        <div class="code-label">JavaScript ES6+</div>
+        <pre><span class="kw">class</span> <span class="cl">TareaUrgente</span> <span class="kw">extends</span> <span class="cl">Tarea</span> {
+
+  <span class="acc">#prioridad</span><span class="op">;</span>   <span class="cm">// Atributo EXTRA — solo en la subclase</span>
+
+  <span class="fn">constructor</span><span class="op">(</span>id, nombre, categoria, prioridad <span class="op">=</span> <span class="str">'alta'</span><span class="op">) {</span>
+    <span class="kw">super</span><span class="op">(</span>id, nombre, categoria<span class="op">);</span>  <span class="cm">// ← llama al constructor padre</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#prioridad</span> <span class="op">=</span> prioridad<span class="op">;</span>
+  <span class="op">}</span>
+
+  <span class="kw">get</span> <span class="fn">prioridad</span><span class="op">()</span> <span class="op">{</span> <span class="kw">return</span> <span class="kw">this</span><span class="op">.</span><span class="acc">#prioridad</span><span class="op">;</span> <span class="op">}</span>
+
+  <span class="cm">// Sobreescribimos toHTML para añadir indicador visual</span>
+  <span class="fn">toHTML</span><span class="op">() {</span>
+    <span class="kw">const</span> base <span class="op">=</span> <span class="kw">super</span><span class="op">.</span><span class="fn">toHTML</span><span class="op">();</span>  <span class="cm">// reutiliza el HTML del padre</span>
+    <span class="kw">return</span> <span class="str">`</span><span class="op">${</span>base<span class="op">}</span><span class="str">
+      &lt;span class="badge urgente"&gt;🔴 </span><span class="op">${</span><span class="kw">this</span><span class="op">.</span><span class="acc">#prioridad</span><span class="op">.</span><span class="fn">toUpperCase</span><span class="op">()}</span><span class="str">&lt;/span&gt;
+    `</span><span class="op">;</span>
+  <span class="op">}</span>
+
+  <span class="cm">// Polimorfismo: mismo método, comportamiento diferente</span>
+  <span class="kw">get</span> <span class="fn">esUrgente</span><span class="op">()</span> <span class="op">{</span> <span class="kw">return</span> <span class="kw">true</span><span class="op">;</span>  <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="cm">// ── Verificación de tipo ────────────────────────────────────</span>
+<span class="kw">const</span> tu <span class="op">=</span> <span class="kw">new</span> <span class="cl">TareaUrgente</span><span class="op">(</span><span class="nb">5</span>, <span class="str">'Fix bug crítico'</span>, <span class="str">'dev'</span>, <span class="str">'crítica'</span><span class="op">);</span>
+
+<span class="fn">console</span><span class="op">.</span><span class="fn">log</span><span class="op">(</span>tu <span class="kw">instanceof</span> <span class="cl">TareaUrgente</span><span class="op">);</span>  <span class="cm">// true</span>
+<span class="fn">console</span><span class="op">.</span><span class="fn">log</span><span class="op">(</span>tu <span class="kw">instanceof</span> <span class="cl">Tarea</span><span class="op">);</span>         <span class="cm">// true ← hereda!</span>
+<span class="fn">console</span><span class="op">.</span><span class="fn">log</span><span class="op">(</span>tu<span class="op">.</span>nombre<span class="op">);</span>                   <span class="cm">// 'Fix bug crítico'</span>
+<span class="fn">console</span><span class="op">.</span><span class="fn">log</span><span class="op">(</span>tu<span class="op">.</span>prioridad<span class="op">);</span>               <span class="cm">// 'crítica'</span>
+
+<span class="cm">// GestionarApp acepta ambos tipos sin modificación ✅</span>
+<span class="kw">const</span> app <span class="op">=</span> <span class="kw">new</span> <span class="cl">GestionarApp</span><span class="op">(</span><span class="str">'#lista'</span><span class="op">);</span>
+app<span class="op">.</span><span class="fn">agregar</span><span class="op">(</span><span class="str">'Tarea normal'</span>, <span class="str">'general'</span><span class="op">);</span>
+<span class="cm">// Para urgentes, puedes extender agregar() o usar una subclase de GestionarApp</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Reto de Código 🎯</div>
+      <div class="challenge">
+        <div class="challenge-title">🏆 Reto 03 — Herencia Avanzada</div>
+        <ul>
+          <li><strong>Fácil:</strong> Añade un método <code>esMayor(otraTareaUrgente)</code> que compare prioridades (<code>"crítica" &gt; "alta" &gt; "media"</code>) y retorne <code>true/false</code>.</li>
+          <li><strong>Medio:</strong> Crea una tercera clase <code>TareaRecurrente</code> que herede de <code>Tarea</code> y añada <code>#frecuencia</code> (diaria, semanal, mensual). Sobreescribe <code>toHTML()</code> para mostrar un ícono 🔄.</li>
+          <li><strong>Difícil:</strong> Modifica <code>GestionarApp</code> para que <code>renderizar()</code> pinte las <code>TareaUrgente</code> con un borde rojo usando <code>instanceof</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ MÓDULO 04 ═══════════════ -->
+  <section class="module m4" id="mod3">
+    <div class="mod-header">
+      <div class="mod-number">MÓDULO 04</div>
+      <div>
+        <div class="mod-title">DOM + POO<br>El Formulario Conectado</div>
+        <div class="mod-subtitle">Captura eventos del formulario y convierte los datos en instancias de clase.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">¿Por qué POO?</div>
+      <div class="why-box">
+        Sin POO tendrías un <code>addEventListener</code> suelto que lee el DOM,
+        crea un objeto plano y lo mete en un array global. Con POO, el formulario
+        le <em>habla</em> a la clase gestora: <strong>el DOM es solo la vista</strong>,
+        y la lógica vive encapsulada en <code>GestionarApp</code>. Si mañana cambias
+        el HTML del formulario, la lógica de negocio no se toca.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Código Guía — Conexión DOM ↔ Clase</div>
+      <div class="code-wrap">
+        <div class="code-label">JavaScript ES6+</div>
+        <pre><span class="cm">// ── 1. Instancia global de la gestora ──────────────────────</span>
+<span class="kw">const</span> app <span class="op">=</span> <span class="kw">new</span> <span class="cl">GestionarApp</span><span class="op">(</span><span class="str">'#lista-tareas'</span><span class="op">);</span>
+
+<span class="cm">// ── 2. Referencia al formulario ────────────────────────────</span>
+<span class="kw">const</span> form <span class="op">=</span> <span class="fn">document</span><span class="op">.</span><span class="fn">querySelector</span><span class="op">(</span><span class="str">'#form-tarea'</span><span class="op">);</span>
+
+<span class="cm">// ── 3. Escuchar el submit ──────────────────────────────────</span>
+form<span class="op">.</span><span class="fn">addEventListener</span><span class="op">(</span><span class="str">'submit'</span><span class="op">, (</span>e<span class="op">) =&gt; {</span>
+  e<span class="op">.</span><span class="fn">preventDefault</span><span class="op">();</span>   <span class="cm">// ← evita recargar la página</span>
+
+  <span class="cm">// 4. Leer valores del formulario</span>
+  <span class="kw">const</span> nombre     <span class="op">=</span> form<span class="op">.</span><span class="fn">querySelector</span><span class="op">(</span><span class="str">'#inp-nombre'</span><span class="op">).</span>value<span class="op">;</span>
+  <span class="kw">const</span> categoria  <span class="op">=</span> form<span class="op">.</span><span class="fn">querySelector</span><span class="op">(</span><span class="str">'#sel-categoria'</span><span class="op">).</span>value<span class="op">;</span>
+  <span class="kw">const</span> esUrgente  <span class="op">=</span> form<span class="op">.</span><span class="fn">querySelector</span><span class="op">(</span><span class="str">'#chk-urgente'</span><span class="op">).</span>checked<span class="op">;</span>
+
+  <span class="cm">// 5. Delegar la lógica a la clase gestora</span>
+  <span class="kw">if</span> <span class="op">(</span>esUrgente<span class="op">) {</span>
+    app<span class="op">.</span><span class="fn">agregarUrgente</span><span class="op">(</span>nombre, categoria, <span class="str">'alta'</span><span class="op">);</span>
+  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+    app<span class="op">.</span><span class="fn">agregar</span><span class="op">(</span>nombre, categoria<span class="op">);</span>
+  <span class="op">}</span>
+
+  form<span class="op">.</span><span class="fn">reset</span><span class="op">();</span>   <span class="cm">// 6. Limpiar el formulario</span>
+<span class="op">});</span>
+
+<span class="cm">// ── GestionarApp ampliada ──────────────────────────────────</span>
+<span class="cm">// (añadir dentro de la clase)</span>
+<span class="fn">agregarUrgente</span><span class="op">(</span>nombre, categoria, prioridad<span class="op">) {</span>
+  <span class="kw">const</span> nueva <span class="op">=</span> <span class="kw">new</span> <span class="cl">TareaUrgente</span><span class="op">(</span>
+    <span class="kw">this</span><span class="op">.</span><span class="acc">#contadorId</span><span class="op">++,</span>
+    nombre, categoria, prioridad
+  <span class="op">);</span>
+  <span class="kw">this</span><span class="op">.</span><span class="acc">#tareas</span><span class="op">.</span><span class="fn">push</span><span class="op">(</span>nueva<span class="op">);</span>
+  <span class="kw">this</span><span class="op">.</span><span class="fn">renderizar</span><span class="op">();</span>
+  <span class="kw">return</span> nueva<span class="op">;</span>
+<span class="op">}</span></pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Flujo de Datos</div>
+      <div class="code-wrap">
+        <pre style="color:var(--text-muted); font-size:.75rem">  Usuario llena el formulario
+         │
+         ▼
+  evento 'submit' capturado
+         │
+         ▼
+  Leer valores del DOM      ← solo aquí tocamos el DOM
+         │
+         ▼
+  app.agregar(nombre, cat)  ← lógica SOLO en la clase
+         │
+         ▼
+  new Tarea(id, nombre, cat) ← nueva instancia creada
+         │
+         ▼
+  this.#tareas.push(nueva)
+         │
+         ▼
+  this.renderizar()          ← DOM actualizado desde la clase</pre>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Reto de Código 🎯</div>
+      <div class="challenge">
+        <div class="challenge-title">🏆 Reto 04 — DOM Profesional</div>
+        <ul>
+          <li><strong>Fácil:</strong> Añade validación en el evento <code>submit</code>: si el nombre está vacío, muestra un mensaje de error en el DOM sin usar <code>alert()</code>.</li>
+          <li><strong>Medio:</strong> Conecta un <code>&lt;input type="search"&gt;</code> con evento <code>input</code> que en tiempo real llame a <code>app.buscarPorNombre()</code> y re-renderice.</li>
+          <li><strong>Difícil:</strong> Implementa edición inline: al hacer doble clic en el nombre de una tarea, conviértelo en un <code>&lt;input&gt;</code>. Al confirmar con Enter, llama a <code>app.editar(id, nuevoNombre)</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ DEMO EN VIVO ═══════════════ -->
+  <section class="module" id="mod4">
+    <div class="demo-header">
+      <div class="hero-badge">Sistema Funcionando</div>
+      <h2>Demo en Vivo: Todo se une aquí</h2>
+      <p>Todos los módulos implementados. Agrega, busca, elimina tareas.</p>
+    </div>
+    <div class="app-grid">
+      <div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-dot d1"></div> Nueva Tarea</div>
+          <div class="panel-body">
+            <div id="form-error" style="display:none;color:var(--m2);font-size:.8rem;margin-bottom:10px;font-family:'Space Mono',monospace;"></div>
+            <div class="field">
+              <label>Nombre de la tarea</label>
+              <input type="text" id="inp-nombre" placeholder="Ej: Estudiar herencia…">
+            </div>
+            <div class="field">
+              <label>Categoría</label>
+              <select id="sel-categoria">
+                <option value="general">General</option>
+                <option value="educación">Educación</option>
+                <option value="trabajo">Trabajo</option>
+                <option value="personal">Personal</option>
+                <option value="dev">Desarrollo</option>
+              </select>
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="chk-urgente">
+              <span>Marcar como urgente 🔴</span>
+            </div>
+            <div id="div-prioridad" style="display:none;margin-top:10px">
+              <div class="field">
+                <label>Nivel de prioridad</label>
+                <select id="sel-prioridad">
+                  <option value="crítica">Crítica</option>
+                  <option value="alta">Alta</option>
+                  <option value="media">Media</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="handleAgregar()">+ Agregar Tarea</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="panel" style="height:100%;display:flex;flex-direction:column">
+          <div class="panel-head"><div class="panel-dot d2"></div> Lista de Tareas</div>
+          <div class="panel-body" style="flex:1;display:flex;flex-direction:column">
+            <div class="search-bar">
+              <input type="text" id="inp-buscar" placeholder="Buscar por nombre…" oninput="handleBuscar()">
+              <button class="btn-sm" onclick="handleLimpiarBusqueda()">Limpiar</button>
+            </div>
+            <div id="taskList"></div>
+            <div class="counter-bar" id="counter-bar">
+              <span>Total: <strong id="cnt-total">0</strong></span>
+              <span>Urgentes: <strong id="cnt-urgentes">0</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <div class="panel-head"><div class="panel-dot d3"></div> Consola de Actividad</div>
+      <div class="console-log" id="consola"></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// MÓDULO 01: Clase Entidad
+// ═══════════════════════════════════════════════════════════
+class Tarea {
+  #id;
+  #nombre;
+  #categoria;
+  #fechaCreacion;
+
+  constructor(id, nombre, categoria = 'general') {
+    this.#id = id;
+    this.#nombre = nombre;
+    this.#categoria = categoria;
+    this.#fechaCreacion = new Date();
+  }
+
+  get id()        { return this.#id; }
+  get nombre()    { return this.#nombre; }
+  get categoria() { return this.#categoria; }
+  get fecha()     { return this.#fechaCreacion; }
+  get esUrgente() { return false; }
+
+  set nombre(v) {
+    if (!v || v.trim().length < 2) throw new Error('Nombre muy corto');
+    this.#nombre = v.trim();
+  }
+
+  toHTML() {
+    return `
+      <div class="task-info">
+        <div class="task-name">${this.#nombre}</div>
+        <div class="task-meta">
+          <span class="tag tag-id">#${this.#id}</span>
+          <span class="tag tag-cat">${this.#categoria}</span>
+          <span class="tag tag-normal">Normal</span>
+        </div>
+      </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MÓDULO 03: Subclase TareaUrgente
+// ═══════════════════════════════════════════════════════════
+class TareaUrgente extends Tarea {
+  #prioridad;
+
+  constructor(id, nombre, categoria, prioridad = 'alta') {
+    super(id, nombre, categoria);
+    this.#prioridad = prioridad;
+  }
+
+  get prioridad() { return this.#prioridad; }
+  get esUrgente() { return true; }
+
+  toHTML() {
+    return `
+      <div class="task-info">
+        <div class="task-name">${this.nombre}</div>
+        <div class="task-meta">
+          <span class="tag tag-id">#${this.id}</span>
+          <span class="tag tag-cat">${this.categoria}</span>
+          <span class="tag tag-urgente">🔴 ${this.#prioridad.toUpperCase()}</span>
+        </div>
+      </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MÓDULO 02: Clase Gestora
+// ═══════════════════════════════════════════════════════════
+class GestionarApp {
+  #tareas = [];
+  #contadorId = 1;
+  #contenedor;
+
+  constructor(selectorContenedor) {
+    this.#contenedor = document.querySelector(selectorContenedor);
+  }
+
+  agregar(nombre, categoria) {
+    const nueva = new Tarea(this.#contadorId++, nombre, categoria);
+    this.#tareas.push(nueva);
+    this.renderizar();
+    return nueva;
+  }
+
+  agregarUrgente(nombre, categoria, prioridad) {
+    const nueva = new TareaUrgente(this.#contadorId++, nombre, categoria, prioridad);
+    this.#tareas.push(nueva);
+    this.renderizar();
+    return nueva;
+  }
+
+  eliminar(id) {
+    this.#tareas = this.#tareas.filter(t => t.id !== id);
+    this.renderizar();
+  }
+
+  buscarPorNombre(termino) {
+    if (!termino.trim()) return this.#tareas;
+    const q = termino.toLowerCase();
+    return this.#tareas.filter(t => t.nombre.toLowerCase().includes(q));
+  }
+
+  get total() { return this.#tareas.length; }
+  get totalUrgentes() { return this.#tareas.filter(t => t.esUrgente).length; }
+
+  renderizar(lista = this.#tareas) {
+    const el = this.#contenedor;
+    if (!lista.length) {
+      el.innerHTML = '<div class="empty-state">Sin tareas todavía</div>';
+    } else {
+      el.innerHTML = lista.map(t => `
+        <div class="task-item ${t.esUrgente ? 'urgente' : ''}">
+          ${t.toHTML()}
+          <button class="btn-del" onclick="app.eliminar(${t.id})" title="Eliminar">✕</button>
+        </div>`).join('');
+    }
+    this.#actualizarContadores();
+  }
+
+  #actualizarContadores() {
+    const ct = document.getElementById('cnt-total');
+    const cu = document.getElementById('cnt-urgentes');
+    if (ct) ct.textContent = this.total;
+    if (cu) cu.textContent = this.totalUrgentes;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MÓDULO 04: Conexión DOM ↔ Clase
+// ═══════════════════════════════════════════════════════════
+const app = new GestionarApp('#taskList');
+
+// Mostrar/ocultar selector de prioridad
+document.getElementById('chk-urgente').addEventListener('change', (e) => {
+  document.getElementById('div-prioridad').style.display = e.target.checked ? 'block' : 'none';
+});
+
+function handleAgregar() {
+  const nombre    = document.getElementById('inp-nombre').value.trim();
+  const categoria = document.getElementById('sel-categoria').value;
+  const urgente   = document.getElementById('chk-urgente').checked;
+  const prioridad = document.getElementById('sel-prioridad').value;
+  const errEl     = document.getElementById('form-error');
+
+  if (nombre.length < 2) {
+    errEl.textContent = '⚠ El nombre debe tener al menos 2 caracteres.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  let nueva;
+  if (urgente) {
+    nueva = app.agregarUrgente(nombre, categoria, prioridad);
+    log(`TareaUrgente creada: "${nueva.nombre}" [${nueva.prioridad}]`, 'warn');
+  } else {
+    nueva = app.agregar(nombre, categoria);
+    log(`Tarea creada: "${nueva.nombre}" [${nueva.categoria}]`);
+  }
+
+  document.getElementById('inp-nombre').value = '';
+  document.getElementById('chk-urgente').checked = false;
+  document.getElementById('div-prioridad').style.display = 'none';
+}
+
+function handleBuscar() {
+  const q = document.getElementById('inp-buscar').value;
+  const resultados = app.buscarPorNombre(q);
+  app.renderizar(resultados);
+  if (q) log(`Búsqueda: "${q}" → ${resultados.length} resultado(s)`);
+}
+
+function handleLimpiarBusqueda() {
+  document.getElementById('inp-buscar').value = '';
+  app.renderizar();
+}
+
+// Consola de actividad
+function log(msg, tipo = '') {
+  const c = document.getElementById('consola');
+  if (!c) return;
+  const d = document.createElement('div');
+  if (tipo) d.className = `log-${tipo}`;
+  d.textContent = msg;
+  c.prepend(d);
+  if (c.children.length > 8) c.lastChild.remove();
+}
+
+// Inicializar con datos de ejemplo
+app.agregar('Estudiar Clases en JS', 'educación');
+app.agregarUrgente('Fix bug en producción', 'dev', 'crítica');
+app.agregar('Leer sobre Getters y Setters', 'educación');
+app.renderizar();
+log('Sistema iniciado · 3 tareas de ejemplo cargadas');
+
+// ── Navegación ──────────────────────────────────────────────
+const btns = document.querySelectorAll('.nav-btn');
+const segs = document.querySelectorAll('.progress-seg');
+const segColors = ['m1-done','m2-done','m3-done','m4-done','m1-done'];
+
+function showModule(idx) {
+  document.querySelectorAll('.module').forEach(m => m.classList.remove('visible'));
+  document.getElementById('mod' + idx).classList.add('visible');
+  btns.forEach((b, i) => b.classList.toggle('active', i === idx));
+  segs.forEach((s, i) => {
+    s.className = 'progress-seg';
+    if (i <= idx) s.classList.add(segColors[i]);
+  });
+}
+</script>
+</body>
+</html>

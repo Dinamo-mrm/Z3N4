@@ -1,0 +1,52 @@
+body { 
+  font-family: sans-serif; 
+  padding: 40px; 
+  max-width: 600px; 
+  margin: auto; 
+}
+
+input { 
+  padding: 10px; 
+  width: 65%; 
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+button { 
+  padding: 10px 15px; 
+  margin-left: 5px; 
+  background: #0D9488; 
+  color: white; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+#btn-borrar-todo {
+  background: #dc5126;
+}
+
+.nota { 
+  background: #F0DFFA; 
+  border-left: 4px solid #0D9488; 
+  padding: 12px; 
+  margin-top: 10px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  border-radius: 0 8px 8px 0;
+}
+
+.btn-eliminar { 
+  background: #dc5126; 
+  color: white; 
+  border: none; 
+  border-radius: 6px; 
+  padding: 6px 12px; 
+  cursor: pointer; 
+}

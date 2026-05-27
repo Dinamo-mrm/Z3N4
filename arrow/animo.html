@@ -1,0 +1,25 @@
+<!DOCTYPE html> 
+<html lang="es"> 
+<head> 
+  <meta charset="UTF-8"> 
+  <title>Cambiador de Ánimo</title> 
+  <style> 
+    body { 
+      font-family: sans-serif; 
+      text-align: center; 
+      padding: 60px; 
+      background: #AED6F1;  /* azul triste al inicio */ 
+      transition: background 0.5s; /* animación suave */ 
+    } 
+    #emoji { font-size: 100px; } 
+    button { padding: 14px 28px; font-size: 18px; border: none; 
+             border-radius: 12px; cursor: pointer; margin-top: 24px; } 
+  </style> 
+</head> 
+<body> 
+  <div id="emoji">😢</div> 
+  <p id="mensaje">Hoy no es mi mejor día...</p> 
+  <button onclick="cambiarAnimo()">¡Anímame!</button> 
+  <script src="animo.js"></script>
+</body> 
+</html>

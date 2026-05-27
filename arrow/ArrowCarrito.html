@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2 - Carrito Inmutable</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; display: flex; gap: 20px; }
+        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); flex: 1; }
+        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .producto-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .cart-item { list-style: none; padding: 10px 0; border-bottom: 1px dashed #ccc; display: flex; justify-content: space-between; }
+        button { cursor: pointer; padding: 5px 10px; border-radius: 4px; border: 1px solid #ddd; }
+        .btn-add { background: #28a745; color: white; }
+        .btn-del { background: #dc3545; color: white; }
+        #total-area { margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+
+    <div class="panel">
+        <h2>Tienda</h2>
+        <div id="productos">
+            </div>
+    </div>
+
+    <div class="panel">
+        <h2>Tu Carrito</h2>
+        <div id="cart"></div>
+        <div id="total-area"></div>
+    </div>
+
+    <script src="ArrowCarrito.js"></script>
+</body>
+</html>

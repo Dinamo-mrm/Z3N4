@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Precios</title>
+  <link rel="stylesheet" href="Calcuivades.css">
+</head>
+<body>
+
+  <h2>💰 Calculadora de precios</h2>
+  <input type="number" id="inp-precio" placeholder="Precio base (ej: 100000)" min="0">
+  
+  <div class="botones">
+    <button onclick="calcularConIVA()">🧾 Sólo IVA 19%</button>
+    <button onclick="calcularConDescuento()">🏷 Descuento 10% + IVA</button>
+  </div>
+
+  <div id="desglose"></div>
+
+  <script src="calcuIvades.js"></script>
+</body>
+</html>

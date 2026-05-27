@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<!-- ==========================================
+     DECLARACIÓN DOCTYPE HTML5
+     Le indica al navegador que este es un documento HTML5
+     SIEMPRE debe ser la primera línea del documento
+========================================== -->
+
+<html lang="es">
+<!-- ==========================================
+     ELEMENTO RAÍZ <html>
+     - Contiene TODO el documento
+     - lang="es": Especifica el idioma (español) para:
+       * Accesibilidad (lectores de pantalla)
+       * SEO (motores de búsqueda)
+       * Traducción automática del navegador
+========================================== -->
+
+<head>
+    <!-- ==========================================
+         SECCIÓN <head>
+         Contiene METADATOS (información sobre el documento)
+         NO se muestra visualmente en la página
+         Incluye: título, enlaces a CSS, configuración, SEO
+    ========================================== -->
+    
+    <meta charset="UTF-8">
+    <!-- META CHARSET
+         - Define la codificación de caracteres
+         - UTF-8: Soporta tildes (á, é, í, ó, ú), ñ, y caracteres especiales
+         - SIEMPRE usar UTF-8 para español
+    -->
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- META VIEWPORT (CRUCIAL para móviles)
+         - width=device-width: Ancho = ancho del dispositivo
+         - initial-scale=1.0: Zoom inicial al 100%
+         - Hace que la página sea RESPONSIVE (adaptable)
+    -->
+    
+    <meta name="description" content="Tech Summit 2024 - Evento de Innovación, Tecnología y Futuro. Únete a más de 2000 profesionales en el evento tech más importante de Colombia.">
+    <!-- META DESCRIPTION (Importante para SEO)
+         - Descripción que aparece en resultados de Google
+         - Debe tener 150-160 caracteres
+         - Incluye palabras clave relevantes
+    -->
+    
+    <meta name="keywords" content="tecnología, innovación, conferencia, tech summit, programación, desarrollo web, inteligencia artificial">
+    <!-- META KEYWORDS
+         - Palabras clave para SEO (menos relevante actualmente)
+         - Separadas por comas
+    -->
+    
+    <meta name="author" content="Tech Summit Team">
+    <!-- META AUTHOR
+         - Identifica al autor del documento
+    -->
+    
+    <title>Tech Summit 2024 | Innovación • Tecnología • Futuro</title>
+    <!-- TITLE (MUY IMPORTANTE)
+         - Aparece en la pestaña del navegador
+         - Aparece en favoritos
+         - Aparece en resultados de búsqueda
+         - Debe ser único y descriptivo
+         - Máximo 60 caracteres recomendado
+    -->
+    
+    <link rel="stylesheet" href="eventoweb.css">
+    <!-- LINK para enlazar CSS externo
+         - rel="stylesheet": Tipo de relación (hoja de estilos)
+         - href: Ruta al archivo CSS
+         - Separa estructura (HTML) de presentación (CSS)
+         - Ventajas: reutilización, caché, mantenibilidad
+    -->
+    
+    <!-- FAVICON (ícono de la pestaña) - Opcional -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <!-- ==========================================
+         ELEMENTO <body>
+         Contiene TODO el contenido VISIBLE de la página
+         Solo puede haber UN <body> por documento
+    ========================================== -->
+    
+    <!-- ==========================================
+         HEADER: Encabezado de la página
+         
+         ELEMENTO SEMÁNTICO
+         - Define el encabezado principal del sitio
+         - Generalmente contiene: logo, navegación, título
+         - Mejora SEO y accesibilidad
+         - Se puede usar sticky para que quede fijo al hacer scroll
+    ========================================== -->
+    <header class="site-header">
+        <!-- CLASS="site-header"
+             - Asigna una clase CSS para aplicar estilos
+             - Se puede reutilizar en múltiples elementos
+             - Convención: nombres descriptivos en minúsculas
+             - Usar guiones (-) para separar palabras
+        -->
+        
+        <div class="header-container">
+            <!-- DIV: División/Contenedor genérico
+                 - Elemento EN BLOQUE (ocupa todo el ancho)
+                 - No tiene significado semántico
+                 - Se usa para agrupar y aplicar estilos
+                 - En este caso: contiene logo + nav
+            -->
+            
+            <div class="logo">
+                <!-- Contenedor del logo -->
+                <span class="logo-icon">🚀</span>
+                <!-- SPAN: Contenedor EN LÍNEA
+                     - Ocupa solo el espacio de su contenido
+                     - Ideal para aplicar estilos a fragmentos
+                     - En este caso: ícono emoji del logo
+                -->
+                
+                <h1>Tech Summit 2024</h1>
+                <!-- H1: Heading nivel 1 (más importante)
+                     - SOLO debe haber UN <h1> por página
+                     - Identifica el tema principal
+                     - Muy importante para SEO
+                     - Los lectores de pantalla lo identifican primero
+                -->
+                
+                <p class="tagline">Innovación • Tecnología • Futuro</p>
+                <!-- P: Párrafo
+                     - Elemento EN BLOQUE
+                     - Agrupa texto relacionado
+                     - tagline: Clase para el eslogan
+                -->
+            </div>
+            
+            <!-- ==========================================
+                 NAV: Navegación
+                 
+                 ELEMENTO SEMÁNTICO
+                 - Define un bloque de navegación
+                 - Contiene enlaces principales del sitio
+                 - Mejora accesibilidad (lectores identifican menú)
+            ========================================== -->
+            <nav class="main-nav">
+                <ul>
+                    <!-- UL: Unordered List (lista NO ordenada)
+                         - Elemento EN BLOQUE
+                         - Contiene elementos <li>
+                         - Por defecto muestra viñetas (bullets)
+                         - CSS puede quitar viñetas con list-style: none
+                    -->
+                    
+                    <li><a href="#inicio">Inicio</a></li>
+                    <!-- LI: List Item (elemento de lista)
+                         - Elemento EN BLOQUE
+                         - Debe estar dentro de <ul> o <ol>
+                         - Representa cada opción del menú
+                    -->
+                    
+                    <!-- A: Anchor (ancla/enlace)
+                         - Elemento EN LÍNEA
+                         - Crea hipervínculos
+                         - href: Hypertext REFerence (destino)
+                         - href="#id": Navega a elemento con ese id
+                         - href="url": Navega a otra página
+                    -->
+                    
+                    <li><a href="#innovacion">Innovación</a></li>
+                    <li><a href="#tecnologia">Tecnología</a></li>
+                    <li><a href="#futuro">Futuro</a></li>
+                    <li><a href="#ponentes">Ponentes</a></li>
+                    <li><a href="#registro">Registro</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ==========================================
+         MAIN: Contenido principal
+         
+         ELEMENTO SEMÁNTICO
+         - Representa el contenido PRINCIPAL y ÚNICO de la página
+         - Solo debe haber UN <main> por página
+         - NO debe incluir: header, footer, nav repetidos
+         - Importante para accesibilidad
+    ========================================== -->
+    <main>
+        
+        <!-- ==========================================
+             SECTION: Sección temática
+             
+             ELEMENTO SEMÁNTICO EN BLOQUE
+             - Agrupa contenido relacionado por tema
+             - Generalmente incluye un encabezado (h2, h3)
+             - Se puede anidar (section dentro de section)
+             
+             ID="inicio"
+             - Identificador ÚNICO en toda la página
+             - Se usa para navegación (#inicio en href)
+             - Se usa en CSS (#inicio { })
+             - Se usa en JavaScript (getElementById)
+             - Solo UN elemento puede tener el mismo ID
+        ========================================== -->
+        <section id="inicio" class="hero-section">
+            <!-- Múltiples clases separadas por espacios -->
+            
+            <div class="hero-content">
+                <h2 class="hero-title">La Revolución Tecnológica Comienza Aquí</h2>
+                <!-- H2: Heading nivel 2
+                     - Subtítulo de sección
+                     - Jerarquía: h1 > h2 > h3 > h4 > h5 > h6
+                     - No saltar niveles (h1 → h3 ✗, h1 → h2 ✓)
+                -->
+                
+                <p class="hero-subtitle">
+                    Únete a <strong>más de 2,000 innovadores</strong> transformando 
+                    la industria tecnológica
+                </p>
+                <!-- STRONG: Texto importante
+                     - Elemento EN LÍNEA
+                     - Significa "texto de gran importancia"
+                     - Por defecto se muestra en NEGRITA
+                     - Diferente de <b> que solo es visual
+                     - Importante para SEO y accesibilidad
+                -->
+                
+                <div class="hero-pillars">
+                    <!-- Contenedor para los 3 pilares -->
+                    
+                    <div class="pillar">
+                        <div class="pillar-icon">💡</div>
+                        <h3>Innovación</h3>
+                        <!-- H3: Heading nivel 3 -->
+                        <p>Ideas que cambian el mundo</p>
+                    </div>
+                    
+                    <div class="pillar">
+                        <div class="pillar-icon">⚡</div>
+                        <h3>Tecnología</h3>
+                        <p>Herramientas del mañana</p>
+                    </div>
+                    
+                    <div class="pillar">
+                        <div class="pillar-icon">🌟</div>
+                        <h3>Futuro</h3>
+                        <p>Construyendo lo imposible</p>
+                    </div>
+                </div>
+                
+                <a href="#registro" class="btn-primary">
+                    ¡Regístrate Ahora!
+                </a>
+                <!-- Enlace estilizado como botón mediante CSS -->
+            </div>
+        </section>
+        
+        <!-- ==========================================
+             SECCIÓN: INFORMACIÓN DEL EVENTO
+        ========================================== -->
+        <section id="info" class="event-info-section">
+            <div class="container">
+                <!-- "container": Clase común para limitar ancho -->
+                
+                <h2 class="section-title">Información del Evento</h2>
+                
+                <div class="info-grid">
+                    <!-- Grid: Sistema de rejilla para organizar tarjetas -->
+                    
+                    <!-- ==========================================
+                         ARTICLE: Contenido independiente
+                         
+                         ELEMENTO SEMÁNTICO EN BLOQUE
+                         - Representa contenido autocontenido
+                         - Tiene sentido por sí mismo
+                         - Se podría distribuir independientemente
+                         - Ejemplos: artículo de blog, tarjeta de producto
+                    ========================================== -->
+                    <article class="info-card">
+                        <div class="card-icon">📅</div>
+                        <h3>Fecha</h3>
+                        <p><strong>15-16 de Marzo, 2024</strong></p>
+                        <p>Viernes y Sábado</p>
+                    </article>
+                    
+                    <article class="info-card">
+                        <div class="card-icon">🕐</div>
+                        <h3>Horario</h3>
+                        <p><strong>8:00 AM - 6:00 PM</strong></p>
+                        <p>Ambos días</p>
+                    </article>
+                    
+                    <article class="info-card">
+                        <div class="card-icon">📍</div>
+                        <h3>Lugar</h3>
+                        <p><strong>Centro de Convenciones</strong></p>
+                        <p>Calle 26 #68-80, Bogotá</p>
+                    </article>
+                    
+                    <article class="info-card">
+                        <div class="card-icon">💰</div>
+                        <h3>Inversión</h3>
+                        <p><strong>$250,000 COP</strong></p>
+                        <p>Incluye certificado</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==========================================
+             SECCIÓN: INNOVACIÓN
+        ========================================== -->
+        <section id="innovacion" class="pillar-section innovation">
+            <div class="container">
+                <h2 class="section-title">💡 Innovación</h2>
+                <p class="section-subtitle">
+                    Transformando <em>ideas audaces</em> en realidad
+                </p>
+                <!-- EM: Emphasis (énfasis)
+                     - Elemento EN LÍNEA
+                     - Marca énfasis en el texto
+                     - Por defecto se muestra en CURSIVA
+                     - Diferente de <i> que solo es visual
+                     - Importante para lectores de pantalla
+                -->
+                
+                <div class="content-grid">
+                    <article class="content-card">
+                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80" 
+                             alt="Red global de innovación tecnológica"
+                             class="card-image">
+                        <!-- IMG: Imagen
+                             - Elemento EN LÍNEA (técnicamente inline-block)
+                             - src: Source (ruta de la imagen)
+                             - alt: Texto alternativo (OBLIGATORIO)
+                               * Se muestra si la imagen no carga
+                               * Lo leen los lectores de pantalla
+                               * Importante para SEO y accesibilidad
+                             - Describir QUÉ muestra, no "imagen de..."
+                        -->
+                        
+                        <div class="card-content">
+                            <h3>Innovación Global</h3>
+                            <p>
+                                Conectando mentes brillantes de todo el mundo para crear 
+                                <mark>soluciones disruptivas</mark> que impactan millones de vidas.
+                            </p>
+                            <!-- MARK: Resaltado
+                                 - Elemento EN LÍNEA
+                                 - Marca texto relevante o destacado
+                                 - Por defecto fondo amarillo
+                                 - Como usar un marcador/resaltador
+                            -->
+                        </div>
+                    </article>
+                    
+                    <article class="content-card">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80" 
+                             alt="Código de programación en pantalla"
+                             class="card-image">
+                        <div class="card-content">
+                            <h3>Startups Disruptivas</h3>
+                            <p>
+                                Conoce empresas emergentes que están desafiando el 
+                                <em>status quo</em> con tecnologías revolucionarias.
+                            </p>
+                        </div>
+                    </article>
+                    
+                    <article class="content-card">
+                        <img src="https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=800&q=80" 
+                             alt="Colaboración en laboratorio tecnológico"
+                             class="card-image">
+                        <div class="card-content">
+                            <h3>Laboratorio de Ideas</h3>
+                            <p>
+                                Sesiones de <code>brainstorming</code> con expertos para 
+                                desarrollar proyectos en tiempo real.
+                            </p>
+                            <!-- CODE: Fragmento de código
+                                 - Elemento EN LÍNEA
+                                 - Representa código de computadora
+                                 - Por defecto fuente monoespaciada
+                                 - Para bloques grandes usar <pre><code>
+                            -->
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==========================================
+             SECCIÓN: TECNOLOGÍA
+        ========================================== -->
+        <section id="tecnologia" class="pillar-section technology">
+            <div class="container">
+                <h2 class="section-title">⚡ Tecnología</h2>
+                <p class="section-subtitle">
+                    Dominando las herramientas que definen el <strong>futuro digital</strong>
+                </p>
+                
+                <!-- ==========================================
+                     UL: Lista no ordenada para tecnologías
+                ========================================== -->
+                <ul class="tech-list">
+                    <li class="tech-item">
+                        <span class="tech-icon">🤖</span>
+                        <h4>Inteligencia Artificial</h4>
+                        <!-- H4: Heading nivel 4 -->
+                        <p><small>Machine Learning, Deep Learning, IA Generativa</small></p>
+                        <!-- SMALL: Texto pequeño
+                             - Elemento EN LÍNEA
+                             - Representa texto de menor importancia
+                             - Por defecto fuente más pequeña
+                             - Útil para notas, legal, copyright
+                        -->
+                    </li>
+                    
+                    <li class="tech-item">
+                        <span class="tech-icon">🔗</span>
+                        <h4>Blockchain & Web3</h4>
+                        <p><small>Smart Contracts, DeFi, NFTs</small></p>
+                    </li>
+                    
+                    <li class="tech-item">
+                        <span class="tech-icon">☁️</span>
+                        <h4>Cloud Computing</h4>
+                        <p><small>AWS, Azure, Google Cloud Platform</small></p>
+                    </li>
+                    
+                    <li class="tech-item">
+                        <span class="tech-icon">📱</span>
+                        <h4>Internet of Things</h4>
+                        <p><small>Dispositivos conectados, Ciudades Inteligentes</small></p>
+                    </li>
+                    
+                    <li class="tech-item">
+                        <span class="tech-icon">🔒</span>
+                        <h4>Ciberseguridad</h4>
+                        <p><small>Ethical Hacking, Protección de Datos</small></p>
+                    </li>
+                    
+                    <li class="tech-item">
+                        <span class="tech-icon">🚀</span>
+                        <h4>DevOps & CI/CD</h4>
+                        <p><small>Automatización, Despliegue Continuo</small></p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- ==========================================
+             SECCIÓN: FUTURO
+        ========================================== -->
+        <section id="futuro" class="pillar-section future">
+            <div class="container">
+                <h2 class="section-title">🌟 Futuro</h2>
+                <p class="section-subtitle">
+                    Construyendo el <em>mañana</em>, hoy
+                </p>
+                
+                <div class="stats-grid">
+                    <!-- Grid de estadísticas -->
+                    
+                    <div class="stat-card">
+                        <div class="stat-number">2,000+</div>
+                        <div class="stat-label">Asistentes Esperados</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Speakers Internacionales</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number">30+</div>
+                        <div class="stat-label">Talleres Prácticos</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">Empresas Participantes</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==========================================
+             SECCIÓN: PONENTES
+        ========================================== -->
+        <section id="ponentes" class="speakers-section">
+            <div class="container">
+                <h2 class="section-title">Ponentes Destacados</h2>
+                
+                <div class="speakers-grid">
+                    <article class="speaker-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" 
+                             alt="Dr. Carlos Méndez, experto en Inteligencia Artificial"
+                             class="speaker-image">
+                        <div class="speaker-info">
+                            <h3>Dr. Carlos Méndez</h3>
+                            <p class="speaker-title">CTO en TechCorp AI</p>
+                            <p class="speaker-bio">
+                                Experto en <strong>Inteligencia Artificial</strong> con 15+ años 
+                                de experiencia en ML y Deep Learning.
+                            </p>
+                            <div class="speaker-topic">
+                                💡 "IA Generativa y el Futuro del Desarrollo"
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="speaker-card">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80" 
+                             alt="Laura Rodríguez, CEO especialista en Cloud Computing"
+                             class="speaker-image">
+                        <div class="speaker-info">
+                            <h3>Laura Rodríguez</h3>
+                            <p class="speaker-title">CEO en CloudInnovate</p>
+                            <p class="speaker-bio">
+                                Pionera en <strong>Cloud Computing</strong>. Ha liderado la 
+                                transformación digital de 200+ empresas.
+                            </p>
+                            <div class="speaker-topic">
+                                ⚡ "Arquitecturas Cloud Nativas"
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="speaker-card">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80" 
+                             alt="Ing. Miguel Santos, Lead Developer en Meta"
+                             class="speaker-image">
+                        <div class="speaker-info">
+                            <h3>Ing. Miguel Santos</h3>
+                            <p class="speaker-title">Lead Developer en Meta</p>
+                            <p class="speaker-bio">
+                                Especialista en <strong>desarrollo web moderno</strong>. 
+                                Contribuidor en React y Next.js.
+                            </p>
+                            <div class="speaker-topic">
+                                🌟 "React y Next.js del Futuro"
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==========================================
+             SECCIÓN: FORMULARIO DE REGISTRO
+             
+             Esta es la sección MÁS IMPORTANTE del taller
+             Aplica TODOS los conceptos de formularios HTML
+        ========================================== -->
+        <section id="registro" class="registration-section">
+            <div class="container">
+                <div class="form-wrapper">
+                    <h2 class="section-title">Formulario de Registro</h2>
+                    <p class="form-intro">
+                        Completa el formulario para asegurar tu lugar en 
+                        <em>Tech Summit 2024</em>. Los campos marcados con 
+                        <span class="required-mark">*</span> son obligatorios.
+                    </p>
+                    
+                    <!-- ==========================================
+                         FORM: Formulario
+                         
+                         Contenedor para elementos de entrada de datos
+                         - action: URL donde se envían los datos
+                         - method: Método HTTP (GET o POST)
+                           * POST: Para enviar datos sensibles
+                           * GET: Para búsquedas (datos en URL)
+                         - novalidate: Desactiva validación HTML5
+                    ========================================== -->
+                    <form action="/procesar-registro" method="POST" class="registration-form">
+                        <!-- En producción real, action apuntaría a un script del servidor -->
+                        
+                        <!-- ==========================================
+                             FIELDSET: Agrupa campos relacionados
+                             
+                             - Crea un borde visual alrededor
+                             - Agrupa campos lógicamente
+                             - Mejora accesibilidad
+                             - Se puede deshabilitar todo el grupo
+                        ========================================== -->
+                        <fieldset class="form-section">
+                            <!-- ==========================================
+                                 LEGEND: Título del fieldset
+                                 
+                                 - Debe ser el primer hijo de <fieldset>
+                                 - Aparece en el borde del fieldset
+                                 - Describe el grupo de campos
+                            ========================================== -->
+                            <legend>Información Personal</legend>
+                            
+                            <!-- ==========================================
+                                 DIV con clase "form-group"
+                                 
+                                 Patrón común para agrupar:
+                                 - Label (etiqueta)
+                                 - Input (campo)
+                                 - Mensaje de error (opcional)
+                                 
+                                 Facilita el estilo CSS y la organización
+                            ========================================== -->
+                            <div class="form-group">
+                                <!-- ==========================================
+                                     LABEL: Etiqueta descriptiva
+                                     
+                                     - SIEMPRE usar con inputs
+                                     - for="id": Conecta con input mediante ID
+                                     - Al hacer clic en label, enfoca el input
+                                     - CRUCIAL para accesibilidad
+                                     - Mejora UX en móviles (área clicable)
+                                ========================================== -->
+                                <label for="nombre">Nombre Completo <span class="required">*</span></label>
+                                
+                                <!-- ==========================================
+                                     INPUT: Campo de entrada
+                                     
+                                     ATRIBUTOS PRINCIPALES:
+                                     - type: Tipo de dato (text, email, etc)
+                                     - id: Identificador único (para label)
+                                     - name: Nombre del campo (para servidor)
+                                     - placeholder: Texto de ejemplo
+                                     - required: Campo obligatorio
+                                     - minlength: Longitud mínima
+                                     - maxlength: Longitud máxima
+                                     
+                                     IMPORTANTE:
+                                     - id: Para CSS y JavaScript
+                                     - name: Para enviar al servidor
+                                     - Son diferentes pero suelen coincidir
+                                ========================================== -->
+                                <input 
+                                    type="text"
+                                    id="nombre"
+                                    name="nombre"
+                                    placeholder="Ej: Juan Pérez García"
+                                    required
+                                    minlength="3"
+                                    maxlength="100"
+                                    autocomplete="name"
+                                >
+                                <!-- autocomplete: Ayuda al navegador a autocompletar -->
+                                
+                                <span class="field-hint">Mínimo 3 caracteres</span>
+                                <!-- Mensaje de ayuda para el usuario -->
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico <span class="required">*</span></label>
+                                <input 
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="correo@ejemplo.com"
+                                    required
+                                    autocomplete="email"
+                                >
+                                <!-- type="email"
+                                     - Valida formato de correo automáticamente
+                                     - Teclado especial en móviles (@, .com)
+                                     - Validación: debe contener @ y dominio
+                                -->
+                                <span class="field-hint">Usaremos este correo para enviarte la confirmación</span>
+                            </div>
+                            
+                            <div class="form-row">
+                                <!-- form-row: Coloca campos en la misma fila (CSS Grid/Flex) -->
+                                
+                                <div class="form-group">
+                                    <label for="telefono">Teléfono <span class="required">*</span></label>
+                                    <input 
+                                        type="tel"
+                                        id="telefono"
+                                        name="telefono"
+                                        placeholder="300 123 4567"
+                                        pattern="[0-9]{10}"
+                                        required
+                                        autocomplete="tel"
+                                    >
+                                    <!-- type="tel"
+                                         - Para números telefónicos
+                                         - Teclado numérico en móviles
+                                         - pattern: Expresión regular
+                                           * [0-9]: Dígitos del 0 al 9
+                                           * {10}: Exactamente 10 dígitos
+                                    -->
+                                    <span class="field-hint">10 dígitos sin espacios</span>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="fecha-nacimiento">Fecha de Nacimiento <span class="required">*</span></label>
+                                    <input 
+                                        type="date"
+                                        id="fecha-nacimiento"
+                                        name="fecha_nacimiento"
+                                        min="1950-01-01"
+                                        max="2006-12-31"
+                                        required
+                                        autocomplete="bday"
+                                    >
+                                    <!-- type="date"
+                                         - Selector de fecha visual
+                                         - Formato: YYYY-MM-DD
+                                         - min/max: Rango de fechas permitidas
+                                         - Interfaz depende del navegador
+                                    -->
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="documento">Número de Documento <span class="required">*</span></label>
+                                <input 
+                                    type="number"
+                                    id="documento"
+                                    name="documento"
+                                    placeholder="1234567890"
+                                    min="1000000"
+                                    max="9999999999"
+                                    required
+                                >
+                                <!-- type="number"
+                                     - Solo acepta números
+                                     - Botones +/- en desktop
+                                     - Teclado numérico en móviles
+                                     - min/max: Rango de valores
+                                     - step: Incremento (default 1)
+                                -->
+                            </div>
+                        </fieldset>
+                        
+                        <!-- ==========================================
+                             INFORMACIÓN PROFESIONAL
+                        ========================================== -->
+                        <fieldset class="form-section">
+                            <legend>Información Profesional</legend>
+                            
+                            <div class="form-group">
+                                <label for="empresa">Empresa / Institución</label>
+                                <!-- SIN asterisco: Campo OPCIONAL -->
+                                <input 
+                                    type="text"
+                                    id="empresa"
+                                    name="empresa"
+                                    placeholder="Nombre de tu empresa o universidad"
+                                    autocomplete="organization"
+                                >
+                                <!-- Sin required: NO es obligatorio -->
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cargo">Cargo / Rol</label>
+                                <input 
+                                    type="text"
+                                    id="cargo"
+                                    name="cargo"
+                                    placeholder="Ej: Desarrollador Frontend"
+                                    autocomplete="organization-title"
+                                >
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="nivel">Nivel de Experiencia <span class="required">*</span></label>
+                                    
+                                    <!-- ==========================================
+                                         SELECT: Lista desplegable
+                                         
+                                         - Permite elegir UNA opción
+                                         - Contiene elementos <option>
+                                         - Más compacto que radio buttons
+                                         - Ideal para 5+ opciones
+                                    ========================================== -->
+                                    <select id="nivel" name="nivel_experiencia" required>
+                                        <!-- ==========================================
+                                             OPTION: Cada opción del select
+                                             
+                                             - value: Valor enviado al servidor
+                                             - Texto: Lo que ve el usuario
+                                             - selected: Opción preseleccionada
+                                             - disabled: Opción no seleccionable
+                                        ========================================== -->
+                                        <option value="">-- Selecciona una opción --</option>
+                                        <!-- value vacío: Opción por defecto (no válida) -->
+                                        
+                                        <option value="estudiante">Estudiante</option>
+                                        <option value="junior">Junior (0-2 años)</option>
+                                        <option value="mid">Mid-Level (2-5 años)</option>
+                                        <option value="senior">Senior (5+ años)</option>
+                                        <option value="experto">Experto/Líder Técnico</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="area">Área de Interés <span class="required">*</span></label>
+                                    <select id="area" name="area_interes" required>
+                                        <option value="">-- Selecciona una opción --</option>
+                                        <option value="ia">Inteligencia Artificial</option>
+                                        <option value="web">Desarrollo Web</option>
+                                        <option value="mobile">Desarrollo Móvil</option>
+                                        <option value="cloud">Cloud Computing</option>
+                                        <option value="blockchain">Blockchain & Web3</option>
+                                        <option value="cybersecurity">Ciberseguridad</option>
+                                        <option value="data">Ciencia de Datos</option>
+                                        <option value="iot">Internet of Things</option>
+                                        <option value="devops">DevOps</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        
+                        <!-- ==========================================
+                             PREFERENCIAS DEL EVENTO
+                        ========================================== -->
+                        <fieldset class="form-section">
+                            <legend>Preferencias del Evento</legend>
+                            
+                            <div class="form-group">
+                                <label class="form-label-main">
+                                    Talleres de Interés <span class="info-text">(selecciona todos los que apliquen)</span>
+                                </label>
+                                
+                                <!-- ==========================================
+                                     CHECKBOX: Múltiples selecciones
+                                     
+                                     - type="checkbox"
+                                     - Permite seleccionar VARIAS opciones
+                                     - checked: Marcado por defecto
+                                     - name con []: Indica array en servidor
+                                       Ejemplo: talleres[] → ['react', 'ia']
+                                     - Cada checkbox es independiente
+                                ========================================== -->
+                                <div class="checkbox-grid">
+                                    <label class="checkbox-label">
+                                        <input 
+                                            type="checkbox" 
+                                            name="talleres[]" 
+                                            value="react"
+                                        >
+                                        <span class="checkbox-text">React y Next.js</span>
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="talleres[]" value="ia">
+                                        <span class="checkbox-text">IA Generativa</span>
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="talleres[]" value="blockchain">
+                                        <span class="checkbox-text">Smart Contracts</span>
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="talleres[]" value="cloud">
+                                        <span class="checkbox-text">Arquitecturas Cloud</span>
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="talleres[]" value="seguridad">
+                                        <span class="checkbox-text">Ciberseguridad</span>
+                                    </label>
+                                    
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="talleres[]" value="data">
+                                        <span class="checkbox-text">Ciencia de Datos</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label-main">
+                                    ¿Cómo te enteraste del evento? <span class="required">*</span>
+                                </label>
+                                
+                                <!-- ==========================================
+                                     RADIO: Una sola selección
+                                     
+                                     - type="radio"
+                                     - Solo UNA opción puede estar seleccionada
+                                     - MISMO name para agrupar opciones
+                                     - Diferentes values para cada opción
+                                     - Al seleccionar uno, se desmarca el anterior
+                                     - Ideal para opciones mutuamente exclusivas
+                                ========================================== -->
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input 
+                                            type="radio" 
+                                            name="origen" 
+                                            value="redes-sociales" 
+                                            required
+                                        >
+                                        <!-- MISMO name="origen" para todos -->
+                                        <span class="radio-text">Redes Sociales</span>
+                                    </label>
+                                    
+                                    <label class="radio-label">
+                                        <input type="radio" name="origen" value="correo" required>
+                                        <span class="radio-text">Correo Electrónico</span>
+                                    </label>
+                                    
+                                    <label class="radio-label">
+                                        <input type="radio" name="origen" value="amigo" required>
+                                        <span class="radio-text">Recomendación de un amigo</span>
+                                    </label>
+                                    
+                                    <label class="radio-label">
+                                        <input type="radio" name="origen" value="web" required>
+                                        <span class="radio-text">Búsqueda en Internet</span>
+                                    </label>
+                                    
+                                    <label class="radio-label">
+                                        <input type="radio" name="origen" value="otro" required>
+                                        <span class="radio-text">Otro</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="mensaje">Comentarios o Preguntas</label>
+                                
+                                <!-- ==========================================
+                                     TEXTAREA: Texto multilínea
+                                     
+                                     - Para textos largos
+                                     - rows: Líneas visibles
+                                     - cols: Columnas (ancho en caracteres)
+                                     - Generalmente se controla con CSS
+                                     - El usuario puede redimensionar
+                                ========================================== -->
+                                <textarea 
+                                    id="mensaje" 
+                                    name="mensaje" 
+                                    rows="5" 
+                                    placeholder="Escribe aquí cualquier comentario, pregunta especial o requerimiento que tengas..."
+                                    maxlength="500"
+                                ></textarea>
+                                <!-- NO es autocerrante: </textarea> necesario -->
+                                <span class="field-hint">Máximo 500 caracteres</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input 
+                                        type="checkbox" 
+                                        name="newsletter" 
+                                        value="si"
+                                        checked
+                                    >
+                                    <!-- checked: Marcado por defecto -->
+                                    <span class="checkbox-text">
+                                        Deseo recibir información sobre futuros eventos y 
+                                        contenido exclusivo
+                                    </span>
+                                </label>
+                            </div>
+                        </fieldset>
+                        
+                        <!-- ==========================================
+                             TÉRMINOS Y CONDICIONES
+                        ========================================== -->
+                        <fieldset class="form-section">
+                            <legend>Términos y Condiciones</legend>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input 
+                                        type="checkbox" 
+                                        name="terminos" 
+                                        value="acepto" 
+                                        required
+                                    >
+                                    <!-- required en checkbox: DEBE estar marcado -->
+                                    <span class="checkbox-text">
+                                        Acepto los 
+                                        <a href="#" target="_blank" rel="noopener">términos y condiciones</a> 
+                                        del evento <span class="required">*</span>
+                                    </span>
+                                    <!-- target="_blank": Abre en nueva pestaña
+                                         rel="noopener": Seguridad (evita acceso a window.opener)
+                                    -->
+                                </label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input 
+                                        type="checkbox" 
+                                        name="datos" 
+                                        value="acepto" 
+                                        required
+                                    >
+                                    <span class="checkbox-text">
+                                        Autorizo el tratamiento de mis datos personales según la 
+                                        <a href="#" target="_blank" rel="noopener">política de privacidad</a> 
+                                        <span class="required">*</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </fieldset>
+                        
+                        <!-- ==========================================
+                             BOTONES DEL FORMULARIO
+                        ========================================== -->
+                        <div class="form-actions">
+                            <!-- ==========================================
+                                 BUTTON: Botón
+                                 
+                                 TIPOS (type attribute):
+                                 - submit: Envía el formulario (default)
+                                 - reset: Limpia todos los campos
+                                 - button: Botón genérico (no hace nada)
+                                 
+                                 IMPORTANTE: Siempre especificar type
+                            ========================================== -->
+                            <button type="reset" class="btn-secondary">
+                                <!-- type="reset": Limpia formulario -->
+                                🔄 Limpiar Formulario
+                            </button>
+                            
+                            <button type="submit" class="btn-primary">
+                                <!-- type="submit": Envía formulario
+                                     - Valida campos required
+                                     - Valida types (email, etc)
+                                     - Valida patterns
+                                     - Si todo OK, envía a action
+                                -->
+                                ✅ Completar Registro
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- ==========================================
+         FOOTER: Pie de página
+         
+         ELEMENTO SEMÁNTICO
+         - Representa el pie del documento
+         - Generalmente contiene:
+           * Información de contacto
+           * Copyright
+           * Enlaces legales
+           * Redes sociales
+         - Puede haber múltiples <footer> (uno por sección)
+    ========================================== -->
+    <footer id="contacto" class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <!-- ==========================================
+                         UL para información de contacto
+                    ========================================== -->
+                    <ul class="contact-list">
+                        <li>
+                            📧 <a href="mailto:info@techsummit2024.com">info@techsummit2024.com</a>
+                            <!-- mailto: Abre cliente de correo -->
+                        </li>
+                        <li>
+                            📱 <a href="tel:+573001234567">+57 300 123 4567</a>
+                            <!-- tel: Abre marcador en móviles -->
+                        </li>
+                        <li>📍 Calle 26 #68-80, Bogotá, Colombia</li>
+                        <li>🕐 Lunes a Viernes: 9:00 AM - 6:00 PM</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#innovacion">💡 Innovación</a></li>
+                        <li><a href="#tecnologia">⚡ Tecnología</a></li>
+                        <li><a href="#futuro">🌟 Futuro</a></li>
+                        <li><a href="#ponentes">Ponentes</a></li>
+                        <li><a href="#registro">Registro</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <div class="social-links">
+                        <a href="#" target="_blank" aria-label="Facebook">📘</a>
+                        <!-- aria-label: Descripción para lectores de pantalla
+                             Importante para accesibilidad cuando no hay texto
+                        -->
+                        <a href="#" target="_blank" aria-label="Twitter">🐦</a>
+                        <a href="#" target="_blank" aria-label="Instagram">📷</a>
+                        <a href="#" target="_blank" aria-label="LinkedIn">💼</a>
+                        <a href="#" target="_blank" aria-label="YouTube">🎥</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Newsletter</h3>
+                    <p>
+                        Recibe contenido exclusivo sobre 
+                        <strong>innovación, tecnología y futuro</strong>.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>
+                    &copy; 2024 Tech Summit - Todos los derechos reservados
+                </p>
+                <!-- &copy; Entidad HTML para símbolo © (copyright)
+                     Otras entidades:
+                     &lt;  <   (less than)
+                     &gt;  >   (greater than)
+                     &amp; &   (ampersand)
+                     &quot; "  (quote)
+                     &nbsp;    (espacio no separable)
+                -->
+                <p>
+                    <small>
+                        Transformando el mundo digital, un evento a la vez 🚀
+                    </small>
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>
+
+<!-- ==========================================
+     FIN DEL DOCUMENTO HTML
+     
+     RESUMEN DE CONCEPTOS CLAVE:
+     
+     1. ESTRUCTURA BÁSICA:
+        - DOCTYPE, html, head, body
+        - Metadatos en <head>
+        - Contenido en <body>
+     
+     2. ELEMENTOS SEMÁNTICOS:
+        - header, nav, main, section, article, footer
+        - Mejoran SEO y accesibilidad
+        - Dan significado al contenido
+     
+     3. ELEMENTOS EN BLOQUE:
+        - Ocupan todo el ancho
+        - Comienzan en nueva línea
+        - Ejemplos: div, p, h1-h6, section, form
+     
+     4. ELEMENTOS EN LÍNEA:
+        - Ocupan solo su espacio
+        - No fuerzan saltos de línea
+        - Ejemplos: span, a, strong, em, input
+     
+     5. FORMULARIOS:
+        - form: Contenedor
+        - fieldset: Agrupación
+        - legend: Título del grupo
+        - label: Etiqueta (SIEMPRE usar)
+        - input: Campos de entrada
+        - select/option: Listas desplegables
+        - textarea: Texto multilínea
+        - button: Botones de acción
+     
+     6. TIPOS DE INPUT:
+        - text: Texto simple
+        - email: Correo (con validación)
+        - tel: Teléfono
+        - number: Números
+        - date: Fecha
+        - checkbox: Múltiples selecciones
+        - radio: Una sola selección
+        - submit/reset: Botones especiales
+     
+     7. ATRIBUTOS IMPORTANTES:
+        - id: Identificador único
+        - class: Clase para CSS
+        - name: Nombre para servidor
+        - required: Campo obligatorio
+        - placeholder: Texto de ejemplo
+        - pattern: Validación regex
+        - min/max: Rangos
+        - minlength/maxlength: Longitud
+     
+     8. ACCESIBILIDAD:
+        - Usar elementos semánticos
+        - label con for
+        - alt en imágenes
+        - aria-label cuando sea necesario
+     
+     9. SEO:
+        - meta description
+        - title descriptivo
+        - estructura jerárquica (h1 > h2 > h3)
+        - URLs semánticas (#seccion-nombre)
+     
+     10. BUENAS PRÁCTICAS:
+         - Cerrar todas las etiquetas
+         - Usar indentación
+         - Comentar secciones
+         - Validar código
+         - Separar HTML, CSS y JS
+         
+========================================== -->
